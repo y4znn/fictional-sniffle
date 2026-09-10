@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Haydar Ghosn — Wedding Filmmaker, Lebanon</title>
+<meta name="description" content="Wedding films by Haydar Ghosn. Based in Lebanon, filming worldwide. 100+ weddings filmed since 2019.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230c0a08'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23e33b30'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c0a08;
+  --panel:#14110d;
+  --ivory:#eae2d3;
+  --brass:#c59d63;
+  --red:#e33b30;
+  --mut:#8d8474;
+  --line:#2a2620;
+  --ink-on-light:#161310;
+  --serif:'Fraunces', Georgia, serif;
+  --mono:'IBM Plex Mono', monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+html.lock{overflow:hidden}
+body{
+  background:var(--bg);
+  color:var(--ivory);
+  font-family:var(--serif);
+  font-weight:300;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--brass);color:var(--bg)}
+::-webkit-scrollbar{width:9px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:#332e26}
+::-webkit-scrollbar-thumb:hover{background:var(--brass)}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:1px dashed var(--brass);outline-offset:4px}
+@media (pointer:fine){
+  body, a, button{cursor:none}
+}
+
+.mono{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase}
+.line{display:block;overflow:hidden}
+.line > .li{display:block;will-change:transform}
+em{font-style:italic;font-weight:300}
+
+/* ============ FIXED LAYERS ============ */
+#grain{position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.55}
+#grain div{position:absolute;inset:0;background-repeat:repeat;background-size:140px 140px;opacity:0}
+#grain div:nth-child(1){animation:gr .9s steps(1) infinite}
+#grain div:nth-child(2){animation:gr .9s steps(1) infinite;animation-delay:-.3s}
+#grain div:nth-child(3){animation:gr .9s steps(1) infinite;animation-delay:-.6s}
+@keyframes gr{0%{opacity:1}33.33%{opacity:0}66.66%{opacity:0}100%{opacity:1}}
+#vignette{position:fixed;inset:0;pointer-events:none;z-index:49;
+  background:radial-gradient(ellipse at center, transparent 58%, rgba(0,0,0,.32) 100%)}
+
+body{--chrome-t:var(--ivory);--chrome-b:var(--ivory)}
+body.t-light{--chrome-t:var(--ink-on-light)}
+body.b-light{--chrome-b:var(--ink-on-light)}
+
+.corner{position:fixed;width:22px;height:22px;z-index:60;pointer-events:none;transition:color .45s ease}
+.corner::before,.corner::after{content:"";position:absolute;background:currentColor}
+.corner::before{width:100%;height:1px}
+.corner::after{width:1px;height:100%}
+.c-tl{top:18px;left:18px;color:var(--chrome-t)}
+.c-tr{top:18px;right:18px;transform:scaleX(-1);color:var(--chrome-t)}
+.c-bl{bottom:18px;left:18px;transform:scaleY(-1);color:var(--chrome-b)}
+.c-br{bottom:18px;right:18px;transform:scale(-1);color:var(--chrome-b)}
+
+#hud{position:fixed;left:0;right:0;bottom:0;z-index:60;pointer-events:none;
+  display:flex;justify-content:space-between;align-items:flex-end;
+  padding:0 52px 26px;color:var(--chrome-b);transition:color .45s ease}
+#hud .mono{opacity:.9}
+.rec-wrap{display:flex;align-items:center;gap:.6em}
+.rec-dot{width:8px;height:8px;border-radius:50%;background:var(--red);
+  animation:blink 1.2s steps(1) infinite}
+@keyframes blink{50%{opacity:.15}}
+#scene-label{white-space:nowrap}
+
+#rail{position:fixed;right:26px;top:50%;transform:translateY(-50%);height:44vh;z-index:60;
+  display:flex;align-items:stretch}
+#rail-track{position:relative;width:3px;background:#26221c}
+.rail-clip{position:absolute;left:0;width:100%;background:#3d372d;transition:background .3s}
+.rail-clip.active{background:var(--brass)}
+.rail-clip::before{content:"";position:absolute;inset:0 -8px}
+.rail-clip i{position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  font-style:normal;font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;
+  color:var(--mut);white-space:nowrap;opacity:0;transition:opacity .3s}
+.rail-clip:hover i,.rail-clip.active i{opacity:1}
+.rail-clip.active i{color:var(--brass)}
+#rail-head{position:absolute;left:-4px;top:0;width:11px;height:2px;background:var(--ivory);
+  box-shadow:0 0 0 1px rgba(0,0,0,.4);will-change:transform}
+
+/* ============ NAV ============ */
+#nav{position:fixed;top:0;left:0;right:0;z-index:70;display:flex;justify-content:space-between;
+  align-items:center;padding:26px 52px;color:var(--chrome-t);transition:color .45s ease}
+#nav .wordmark{font-family:var(--serif);font-size:1.05rem;font-weight:500;letter-spacing:.04em}
+#nav .wordmark em{font-weight:300}
+#nav ul{display:flex;gap:2.2rem;list-style:none}
+#nav ul a{font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;position:relative;padding-bottom:3px}
+#nav ul a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:currentColor;transition:width .35s cubic-bezier(.19,1,.22,1)}
+#nav ul a:hover::after{width:100%}
+
+/* ============ PRELOADER ============ */
+#preloader{position:fixed;inset:0;z-index:200}
+.shutter{position:absolute;left:0;width:100%;height:50.5%;background:#070604;will-change:transform}
+.shutter.top{top:0}.shutter.bottom{bottom:0}
+.pre-center{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  align-items:center;gap:1.4rem;z-index:2;text-align:center;padding:0 20px}
+.pre-name{font-size:clamp(1.6rem,4.5vw,3rem);font-weight:400;letter-spacing:.06em}
+.pre-name em{color:var(--brass)}
+#pre-tc{color:var(--mut)}
+.pre-sub{color:var(--mut-dim)}
+
+/* ============ HERO ============ */
+#hero{position:relative;height:100vh;height:100svh;overflow:hidden;display:flex;
+  align-items:center;justify-content:center}
+.hero-media{position:absolute;inset:0;overflow:hidden}
+.hero-media img,.hero-media video{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;filter:grayscale(.3) contrast(1.1) brightness(.72) sepia(.22) saturate(1.05)}
+#hero-poster{transform:scale(1.08);will-change:transform}
+.hero-media video{opacity:0;transition:opacity 1.4s ease}
+.hero-media video.on{opacity:1}
+.hero-media::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse at center, transparent 45%, rgba(5,4,3,.55) 100%)}
+.hero-content{position:relative;z-index:3;text-align:center;padding:0 20px;will-change:transform,opacity}
+.hero-slate{color:var(--ivory);opacity:.75;margin-bottom:2.2rem}
+.hero-slate .rule{display:inline-block;width:34px;height:1px;background:var(--brass);
+  vertical-align:middle;margin:0 14px}
+h1{font-size:clamp(3.4rem,12.5vw,11rem);line-height:.92;font-weight:400;letter-spacing:.01em}
+h1 .l2{font-style:italic;font-weight:300;margin-left:.08em}
+.hero-scroll{position:absolute;bottom:84px;left:50%;transform:translateX(-50%);z-index:3;
+  display:flex;flex-direction:column;align-items:center;gap:.8rem;color:var(--mut)}
+.hero-scroll .tick{width:1px;height:44px;background:var(--mut-dim);overflow:hidden;position:relative}
+.hero-scroll .tick::after{content:"";position:absolute;left:0;top:-100%;width:100%;height:100%;
+  background:var(--brass);animation:tick 1.8s cubic-bezier(.65,0,.35,1) infinite}
+@keyframes tick{to{top:100%}}
+.hero-est{position:absolute;bottom:84px;right:52px;z-index:3;color:var(--mut)}
+
+/* ============ SCENES ============ */
+.scene{position:relative;padding:clamp(6rem,14vh,10rem) 8vw}
+.slate{display:flex;align-items:center;gap:1.2rem;margin-bottom:3rem;color:var(--brass)}
+.slate .rule{flex:0 0 44px;height:1px;background:var(--brass)}
+h2{font-size:clamp(2.2rem,5.2vw,4.6rem);line-height:1.06;font-weight:400;letter-spacing:-.01em}
+h2 em{color:var(--brass)}
+.scene.dark{background:var(--bg);color:var(--ivory)}
+.scene.dark .body{color:#cdc5b4}
+.scene.light{background:var(--ivory);color:var(--ink-on-light)}
+.scene.light h2 em{color:#8a6a34}
+
+/* ============ ABOUT ============ */
+#about .grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,4fr);gap:clamp(3rem,7vw,7rem);align-items:start}
+#about .body{font-size:clamp(1.05rem,1.6vw,1.3rem);line-height:1.75;margin-top:2.6rem;max-width:54ch}
+.stats{border-top:1px solid var(--line)}
+.stat{padding:1.9rem 0;border-bottom:1px solid var(--line)}
+.stat .num{font-size:clamp(3rem,5.5vw,5rem);font-weight:300;line-height:1;letter-spacing:-.02em}
+.stat .num sup{font-size:.45em;color:var(--brass);font-style:italic}
+.stat .lbl{display:block;margin-top:.8rem;color:var(--mut)}
+
+/* ============ FILMS ============ */
+#films{height:100vh;height:100svh;padding:0;overflow:hidden}
+.films-sticky{height:100%;display:flex;flex-direction:column;justify-content:center}
+.films-head{display:flex;justify-content:space-between;align-items:flex-end;
+  padding:0 8vw;margin-bottom:clamp(2rem,5vh,4rem)}
+.films-head .hint{color:var(--mut)}
+.films-track{display:flex;align-items:center;gap:clamp(2rem,4.5vw,4.5rem);
+  padding:0 8vw;width:max-content;will-change:transform}
+.film-card{flex:none;width:clamp(300px,52vw,720px);display:block}
+.film-card:nth-child(even){transform:translateY(4vh)}
+.film-frame{position:relative;aspect-ratio:2.35/1;overflow:hidden;background:var(--panel)}
+.film-poster{position:absolute;inset:0;background-size:cover;background-position:center;
+  filter:grayscale(.4) contrast(1.08) brightness(.78) sepia(.25);
+  transform:scale(1.03);
+  transition:transform 1.2s cubic-bezier(.19,1,.22,1)}
+.film-frame::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 110px rgba(0,0,0,.55)}
+.film-grade{position:absolute;inset:0;background:#c9973f;mix-blend-mode:soft-light;opacity:.32;
+  transition:opacity 1.2s ease}
+.film-card:hover .film-poster{transform:scale(1.09);
+  filter:grayscale(0) contrast(1.12) brightness(.95) sepia(.15) saturate(1.2)}
+.film-card:hover .film-grade{opacity:.14}
+.film-tc{position:absolute;right:14px;bottom:12px;font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.14em;color:var(--ivory);opacity:.85;text-shadow:0 1px 6px rgba(0,0,0,.7)}
+.film-meta{display:flex;align-items:baseline;gap:1.4rem;margin-top:1.3rem}
+.film-idx{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;color:var(--mut);transition:color .4s}
+.film-card:hover .film-idx{color:var(--brass)}
+.film-title{font-size:clamp(1.4rem,2.4vw,2rem);font-weight:400}
+.film-title em{color:var(--brass)}
+.film-loc{margin-left:auto;font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;color:var(--mut)}
+.film-end{flex:none;width:clamp(280px,38vw,520px);aspect-ratio:2.35/1;border:1px solid var(--line);
+  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1.4rem;
+  text-align:center;transition:border-color .5s,background .5s}
+.film-end:hover{border-color:var(--brass);background:var(--panel)}
+.film-end .big{font-size:clamp(1.6rem,3vw,2.6rem);font-weight:400}
+.film-end .mono{color:var(--mut)}
+
+/* ============ PROCESS ============ */
+#process .acts{margin-top:3.6rem;border-bottom:1px solid var(--line)}
+.act{display:grid;grid-template-columns:150px 1fr 260px;gap:2.5rem;align-items:baseline;
+  padding:2.6rem 0;border-top:1px solid var(--line);transition:padding-left .5s cubic-bezier(.19,1,.22,1)}
+.act:hover{padding-left:1.4rem}
+.act-no{font-style:italic;font-size:1.1rem;color:var(--mut);transition:color .4s}
+.act:hover .act-no{color:var(--brass)}
+.act h3{font-size:clamp(1.6rem,3vw,2.5rem);font-weight:400}
+.act p{color:#cdc5b4;line-height:1.7;max-width:44ch}
+.act-meta{text-align:right;color:var(--mut)}
+
+/* ============ REVIEWS ============ */
+#reviews .quotes{margin-top:4rem;display:flex;flex-direction:column;gap:clamp(5rem,12vh,8rem)}
+.quote{max-width:880px;position:relative}
+.quote:nth-child(2){margin-left:auto}
+.quote blockquote{font-size:clamp(1.5rem,3.2vw,2.7rem);line-height:1.35;font-weight:300}
+.quote blockquote::before{content:"\201C";position:absolute;left:-.55em;top:-.18em;
+  font-size:1.6em;color:#8a6a34;opacity:.85}
+.quote figcaption{margin-top:1.6rem;color:#6f675a}
+
+/* ============ CONTACT ============ */
+#contact h2{font-size:clamp(2.8rem,7.5vw,7rem)}
+.booking{margin-top:2rem;color:var(--brass)}
+.cta-row{display:flex;flex-wrap:wrap;gap:1.2rem;margin-top:3.4rem;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:.9em;border:1px solid var(--ivory);
+  padding:1.15rem 2.1rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;
+  text-transform:uppercase;transition:background .4s,color .4s,border-color .4s}
+.btn:hover{background:var(--ivory);color:var(--bg)}
+.btn.ghost{border-color:var(--line);color:var(--mut)}
+.btn.ghost:hover{border-color:var(--ivory);background:transparent;color:var(--ivory)}
+.btn svg{width:15px;height:15px}
+.contact-meta{margin-top:2.6rem;color:var(--mut);display:flex;gap:2.4rem;flex-wrap:wrap}
+.contact-meta a{border-bottom:1px solid var(--line);padding-bottom:2px;transition:color .3s,border-color .3s}
+.contact-meta a:hover{color:var(--brass);border-color:var(--brass)}
+
+/* ============ FOOTER ============ */
+footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
+  flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:2rem}
+.foot-name{font-size:clamp(1.8rem,4vw,3.2rem);font-weight:400}
+.foot-right{text-align:right;color:var(--mut);display:flex;flex-direction:column;gap:.7rem}
+
+/* ============ CURSOR ============ */
+#cursor{position:fixed;top:0;left:0;width:12px;height:12px;border-radius:50%;
+  background:var(--ivory);z-index:120;pointer-events:none;
+  box-shadow:0 0 0 1px rgba(0,0,0,.22);
+  display:none;align-items:center;justify-content:center;will-change:transform;
+  transition:width .3s,height .3s,background .3s}
+#cursor .cur-label{font-family:var(--mono);font-size:.56rem;letter-spacing:.18em;color:var(--bg);
+  opacity:0;transition:opacity .25s;white-space:nowrap}
+#cursor.play,#cursor.link{width:72px;height:72px;background:var(--ivory)}
+#cursor.play .cur-label{opacity:1}
+#cursor.down{scale:.85}
+@media (pointer:fine){#cursor{display:flex}}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:900px){
+  #rail,#hud #scene-label,.hero-est{display:none}
+  #nav{padding:22px 24px}
+  #nav ul li:not(.keep){display:none}
+  #hud{padding:0 24px 20px}
+  .scene{padding-left:6vw;padding-right:6vw}
+  #about .grid{grid-template-columns:1fr}
+  .act{grid-template-columns:1fr;gap:.8rem}
+  .act-meta{text-align:left}
+  .film-card{width:78vw}
+  .film-card:nth-child(even){transform:none}
+  .film-loc{display:none}
+  .films-head{flex-direction:column;align-items:flex-start;gap:1rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .rec-dot,.hero-scroll .tick::after{animation:none}
+  #grain div{animation:none}
+  #grain div:nth-child(1){opacity:1}
+  html{scroll-behavior:auto}
+}
+</style>
+<noscript><style>#preloader{display:none}</style></noscript>
+</head>
+<body>
+
+<div id="preloader" aria-hidden="true">
+  <div class="shutter top"></div>
+  <div class="shutter bottom"></div>
+  <div class="pre-center">
+    <p class="mono pre-sub">LOADING</p>
+    <div class="pre-name">
+      <span class="line"><span class="li" style="transform:translateY(110%)">HAYDAR <em>GHOSN</em></span></span>
+    </div>
+    <p class="mono" id="pre-tc">TC 00:00:00:00</p>
+  </div>
+</div>
+
+<div id="grain" aria-hidden="true"></div>
+<div id="vignette" aria-hidden="true"></div>
+<div class="corner c-tl"></div><div class="corner c-tr"></div>
+<div class="corner c-bl"></div><div class="corner c-br"></div>
+
+<div id="hud">
+  <span class="rec-wrap mono"><span class="rec-dot"></span><span>REC</span><span id="tc">TC 00:00:00:00</span></span>
+  <span class="mono" id="scene-label">SCENE 00</span>
+</div>
+
+<nav id="rail" aria-label="Scene timeline">
+  <div id="rail-track"><div id="rail-head"></div></div>
+</nav>
+
+<header id="nav">
+  <a href="#hero" class="wordmark">HAYDAR <em>GHOSN</em></a>
+  <ul class="mono">
+    <li><a href="#about">About</a></li>
+    <li><a href="#films">Films</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li class="keep"><a href="#contact">Contact</a></li>
+  </ul>
+</header>
+
+<main>
+  <!-- ======= HERO ======= -->
+  <section id="hero">
+    <div class="hero-media" id="hero-media">
+      <img id="hero-poster" src="https://picsum.photos/seed/haydar-opening/1920/1080.jpg" alt="" fetchpriority="high" decoding="async">
+    </div>
+    <div class="hero-content" id="hero-content">
+      <p class="mono hero-slate" data-fade>WEDDING FILMMAKER<span class="rule"></span>LEBANON</p>
+      <h1 aria-label="Haydar Ghosn">
+        <span class="line"><span class="li" style="transform:translateY(112%)">HAYDAR</span></span>
+        <span class="line"><span class="li l2" style="transform:translateY(112%)"><em>GHOSN</em></span></span>
+      </h1>
+    </div>
+    <div class="hero-scroll" data-fade>
+      <span class="mono">Scroll</span>
+      <span class="tick"></span>
+    </div>
+    <p class="mono hero-est" data-fade>EST. 2019 — 100+ WEDDINGS</p>
+  </section>
+
+  <!-- ======= SCENE 01 · ABOUT ======= -->
+  <section id="about" class="scene dark">
+    <p class="mono slate" data-fade><span class="rule"></span>SCENE 01 — ABOUT</p>
+    <h2>
+      <span class="line"><span class="li">The day,</span></span>
+      <span class="line"><span class="li">as it <em>happened.</em></span></span>
+    </h2>
+    <div class="grid">
+      <div>
+        <p class="body" data-fade>I've filmed over one hundred weddings across Lebanon in the past five years. My films are cinematic and documentary at once — built from what actually happened, not from a script.</p>
+        <p class="body" data-fade>On the day I stay out of the way. In the edit I stay on it for weeks, until it plays the way the day felt.</p>
+      </div>
+      <div class="stats">
+        <div class="stat" data-fade><span class="num"><span data-count="100">100</span><sup>+</sup></span><span class="lbl mono">Weddings filmed</span></div>
+        <div class="stat" data-fade><span class="num"><span data-count="5">5</span><sup>+</sup></span><span class="lbl mono">Years filming</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= SCENE 02 · FILMS ======= -->
+  <section id="films" class="scene dark">
+    <div class="films-sticky">
+      <div class="films-head">
+        <div>
+          <p class="mono slate" style="margin-bottom:1.6rem"><span class="rule"></span>SCENE 02 — FILMS</p>
+          <h2>
+            <span class="line"><span class="li">Selected <em>films.</em></span></span>
+          </h2>
+        </div>
+        <p class="mono hint" data-fade>Keep scrolling</p>
+      </div>
+      <div class="films-track" id="films-track">
+        <!-- TODO: swap couple names + posters with real ones from each reel -->
+        <a class="film-card" data-cursor="play" href="https://www.instagram.com/reel/DaYykpbMx-Z/" target="_blank" rel="noopener">
+          <div class="film-frame">
+            <div class="film-poster" style="background-image:url('https://picsum.photos/seed/hg-reel-one/1400/600.jpg')"></div>
+            <div class="film-grade"></div>
+            <span class="film-tc">00:03:47</span>
+          </div>
+          <div class="film-meta">
+            <span class="film-idx">01</span>
+            <h3 class="film-title">Nour <em>&amp;</em> Karim</h3>
+            <span class="film-loc">BEIRUT</span>
+          </div>
+        </a>
+        <a class="film-card" data-cursor="play" href="https://www.instagram.com/reel/Da5voI0s3pL/" target="_blank" rel="noopener">
+          <div class="film-frame">
+            <div class="film-poster" style="background-image:url('https://picsum.photos/seed/hg-reel-two/1400/600.jpg')"></div>
+            <div class="film-grade"></div>
+            <span class="film-tc">00:02:58</span>
+          </div>
+          <div class="film-meta">
+            <span class="film-idx">02</span>
+            <h3 class="film-title">Yara <em>&amp;</em> Elie</h3>
+            <span class="film-loc">MOUNT LEBANON</span>
+          </div>
+        </a>
+        <a class="film-card" data-cursor="play" href="https://www.instagram.com/reel/DcrbUrDOnd7/" target="_blank" rel="noopener">
+          <div class="film-frame">
+            <div class="film-poster" style="background-image:url('https://picsum.photos/seed/hg-reel-three/1400/600.jpg')"></div>
+            <div class="film-grade"></div>
+            <span class="film-tc">00:04:12</span>
+          </div>
+          <div class="film-meta">
+            <span class="film-idx">03</span>
+            <h3 class="film-title">Layal <em>&amp;</em> Rami</h3>
+            <span class="film-loc">BATROUN</span>
+          </div>
+        </a>
+        <!-- TODO: point at Haydar's Instagram profile -->
+        <a class="film-end" data-cursor="link" href="https://www.instagram.com/" target="_blank" rel="noopener">
+          <p class="big">More films</p>
+          <span class="mono">Instagram →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= SCENE 03 · PROCESS ======= -->
+  <section id="process" class="scene dark">
+    <p class="mono slate" data-fade><span class="rule"></span>SCENE 03 — PROCESS</p>
+    <h2>
+      <span class="line"><span class="li">How it <em>works.</em></span></span>
+    </h2>
+    <div class="acts">
+      <div class="act" data-fade>
+        <span class="act-no">I</span>
+        <div>
+          <h3>Before</h3>
+          <p>One call. We plan the film around your day.</p>
+        </div>
+        <span class="mono act-meta">Pre-production</span>
+      </div>
+      <div class="act" data-fade>
+        <span class="act-no">II</span>
+        <div>
+          <h3>The day</h3>
+          <p>I film like a guest. You won't notice me.</p>
+        </div>
+        <span class="mono act-meta">Wedding day</span>
+      </div>
+      <div class="act" data-fade>
+        <span class="act-no">III</span>
+        <div>
+          <h3>The film</h3>
+          <p>Edit, sound, color. Delivered as a film, not files.</p>
+        </div>
+        <span class="mono act-meta">Post-production</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= SCENE 04 · REVIEWS ======= -->
+  <section id="reviews" class="scene light">
+    <p class="mono slate" data-fade><span class="rule"></span>SCENE 04 — REVIEWS</p>
+    <h2>
+      <span class="line"><span class="li">What couples <em>say.</em></span></span>
+    </h2>
+    <!-- TODO: swap with real testimonials -->
+    <div class="quotes">
+      <figure class="quote" data-fade>
+        <blockquote>We forgot the camera was there.</blockquote>
+        <figcaption class="mono">Ranya &amp; Elie — Mount Lebanon</figcaption>
+      </figure>
+      <figure class="quote" data-fade>
+        <blockquote>The film feels exactly like the day felt.</blockquote>
+        <figcaption class="mono">Carla &amp; Georges — Beirut</figcaption>
+      </figure>
+      <figure class="quote" data-fade>
+        <blockquote>We still watch it every anniversary.</blockquote>
+        <figcaption class="mono">Nada &amp; Fadi — Batroun</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ======= SCENE 05 · CONTACT ======= -->
+  <section id="contact" class="scene dark">
+    <p class="mono slate" data-fade><span class="rule"></span>SCENE 05 — CONTACT</p>
+    <h2>
+      <span class="line"><span class="li">Book your <em>date.</em></span></span>
+    </h2>
+    <p class="mono booking" data-fade>Now booking 2025 — 2026</p>
+    <div class="cta-row" data-fade>
+      <a class="btn" data-cursor="link" href="https://wa.me/96179151854" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn ghost" data-cursor="link" href="https://www.instagram.com/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.4"/><circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" stroke="none"/></svg>
+        Instagram
+      </a>
+    </div>
+    <div class="contact-meta mono" data-fade>
+      <a href="tel:+96179151854">+961 79 151 854</a>
+      <span>Beirut, Lebanon</span>
+    </div>
+  </section>
+
+  <footer>
+    <div>
+      <p class="foot-name">HAYDAR <em style="color:var(--brass)">GHOSN</em></p>
+      <p class="mono" style="color:var(--mut);margin-top:.9rem">© 2025</p>
+    </div>
+    <div class="foot-right mono">
+      <span>+961 79 151 854</span>
+      <span>Beirut, Lebanon</span>
+    </div>
+  </footer>
+</main>
+
+<div id="cursor"><span class="cur-label">PLAY</span></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+/* ================================================================
+   HAYDAR GHOSN — ENGINE
+   UPGRADE SLOT: paste a direct .mp4 below and scroll-scrubbing
+   through real footage switches on automatically.
+================================================================ */
+const CONFIG = {
+  heroVideo: '',  // ← e.g. 'https://yourhost.com/haydar-opening.mp4'
+};
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const finePointer  = window.matchMedia('(pointer: fine)').matches;
+const hasGsap = typeof gsap !== 'undefined';
+const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
+if(hasGsap){
+  gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ ignoreMobileResize:true });
+}
+document.documentElement.classList.add('lock');
+const body = document.body;
+let introDone = false;
+
+/* ---------- FILM GRAIN (3 tiles, cycled by CSS) ---------- */
+(() => {
+  const host = document.getElementById('grain');
+  const size = 140;
+  for(let i=0;i<3;i++){
+    const c = document.createElement('canvas'); c.width = c.height = size;
+    const cx = c.getContext('2d');
+    const d = cx.createImageData(size,size), px = d.data;
+    for(let j=0;j<px.length;j+=4){ const v=(Math.random()*255)|0; px[j]=px[j+1]=px[j+2]=v; px[j+3]=28; }
+    cx.putImageData(d,0,0);
+    const div = document.createElement('div');
+    div.style.backgroundImage = `url(${c.toDataURL()})`;
+    host.appendChild(div);
+  }
+})();
+
+/* ---------- CUSTOM CURSOR (instant, positioned in the event) ---------- */
+const cursorEl = document.getElementById('cursor');
+if(!finePointer){
+  cursorEl.remove();
+}else{
+  cursorEl.style.transform = 'translate3d(-100px,-100px,0)';
+  addEventListener('mousemove', e => {
+    cursorEl.style.transform = `translate3d(${e.clientX}px,${e.clientY}px,0) translate(-50%,-50%)`;
+  }, { passive:true });
+  addEventListener('mousedown', () => cursorEl.classList.add('down'), { passive:true });
+  addEventListener('mouseup',   () => cursorEl.classList.remove('down'), { passive:true });
+  document.addEventListener('mouseover', e => {
+    const t = e.target.closest('[data-cursor]');
+    cursorEl.classList.toggle('play', !!t && t.dataset.cursor==='play');
+    cursorEl.classList.toggle('link', !!t && t.dataset.cursor==='link');
+  });
+}
+
+/* ---------- HERO VIDEO SLOT ---------- */
+const heroMedia = document.getElementById('hero-media');
+const heroPoster = document.getElementById('hero-poster');
+let heroVideo = null, videoReady = false;
+if(CONFIG.heroVideo){
+  heroVideo = document.createElement('video');
+  Object.assign(heroVideo, { src: CONFIG.heroVideo, muted: true, playsInline: true, preload: 'auto' });
+  heroVideo.addEventListener('canplaythrough', () => {
+    videoReady = true;
+    heroVideo.currentTime = 0.001;
+    heroVideo.classList.add('on');
+  }, { once:true });
+  heroVideo.addEventListener('error', () => { heroVideo = null; }, { once:true });
+  heroMedia.appendChild(heroVideo);
+}
+
+/* ================================================================
+   ENGINE — one loop, cached measurements, change-detection
+================================================================ */
+const TOTAL_SECONDS = 168;
+const tcEl      = document.getElementById('tc');
+const railHead  = document.getElementById('rail-head');
+const railTrack = document.getElementById('rail-track');
+const heroContent = document.getElementById('hero-content');
+const scrollCue = document.querySelector('.hero-scroll');
+const NAV_H = 84, HUD_H = 72;
+const pad = n => String(n).padStart(2,'0');
+const tcFromFrames = f => {
+  const s = (f/24)|0;
+  return `TC ${pad((s/3600)|0)}:${pad(((s/60)|0)%60)}:${pad(s%60)}:${pad(f%24)}`;
+};
+
+const RAIL = [
+  ['#hero','00'], ['#about','01'], ['#films','02'],
+  ['#process','03'], ['#reviews','04'], ['#contact','05'],
+];
+const pinnedHolder = el => (el.parentElement && el.parentElement.classList.contains('pin-spacer')) ? el.parentElement : el;
+const sections = RAIL.map(([sel,label]) => {
+  const clip = document.createElement('a');
+  clip.href = sel; clip.className = 'rail-clip'; clip.setAttribute('aria-label', 'Scene ' + label);
+  clip.innerHTML = `<i>${label}</i>`;
+  clip.addEventListener('click', e => {
+    e.preventDefault();
+    const s = sections.find(x => x.sel === sel);
+    window.scrollTo({ top:(s?s.top:0)+2, behavior: reduceMotion ? 'auto' : 'smooth' });
+  });
+  railTrack.appendChild(clip);
+  return { sel, clip, top:0, height:0 };
+});
+
+let vh = innerHeight, docH = 1, trackH = 1, railVisible = true;
+let wordsTop = 1e9, wordsBottom = 1e9;
+function measure(){
+  vh = innerHeight;
+  railVisible = matchMedia('(min-width:901px)').matches;
+  docH = Math.max(1, document.documentElement.scrollHeight - vh);
+  const w = pinnedHolder(document.getElementById('reviews'));
+  const wTop = w.getBoundingClientRect().top + scrollY;
+  wordsTop = wTop; wordsBottom = wTop + w.offsetHeight;
+  if(railVisible){
+    sections.forEach(s => {
+      const h = pinnedHolder(document.querySelector(s.sel));
+      s.top = h.getBoundingClientRect().top + scrollY;
+      s.height = h.offsetHeight;
+      s.clip.style.top    = (s.top/docH*100) + '%';
+      s.clip.style.height = Math.max(2, (s.height/docH*100)) + '%';
+    });
+    trackH = railTrack.offsetHeight;
+    S.lastActive = -2; S.lastHead = -1;
+  }
+}
+
+const S = {
+  smooth: scrollY,
+  lastFrame: -1, lastHead: -1, lastActive: -1,
+  tState: null, bState: null, lastHero: true,
+};
+let running = !document.hidden;
+
+function engine(){
+  if(!running) return;
+
+  /* instruments read raw scroll (instant); imagery reads smoothed (weight) */
+  S.smooth += (scrollY - S.smooth) * (reduceMotion ? 1 : 0.16);
+  if(Math.abs(scrollY - S.smooth) < 0.05) S.smooth = scrollY;
+
+  const p = clamp(scrollY / docH, 0, 1);
+  const frame = (p * TOTAL_SECONDS * 24) | 0;
+  if(frame !== S.lastFrame){ S.lastFrame = frame; tcEl.textContent = tcFromFrames(frame); }
+
+  if(railVisible){
+    const headPx = Math.round(p * trackH);
+    if(headPx !== S.lastHead){
+      S.lastHead = headPx;
+      railHead.style.transform = `translate3d(0,${headPx}px,0)`;
+    }
+    const mid = scrollY + vh*0.5;
+    let act = 0;
+    for(let i=0;i<sections.length;i++) if(mid >= sections[i].top) act = i;
+    if(act !== S.lastActive){
+      S.lastActive = act;
+      sections.forEach((s,i) => s.clip.classList.toggle('active', i===act));
+    }
+  }
+
+  if(introDone && S.smooth < vh*2.6){
+    const sp = clamp(S.smooth/(vh*2), 0, 1);
+    heroPoster.style.transform = `translate3d(0,${(sp*-1.5).toFixed(2)}%,0) scale(${(1.08+sp*0.13).toFixed(4)})`;
+    const hp = clamp(S.smooth/(vh*0.75), 0, 1);
+    heroContent.style.transform = `translate3d(0,${(S.smooth*0.22).toFixed(1)}px,0)`;
+    heroContent.style.opacity = (1-hp).toFixed(3);
+    if(scrollCue) scrollCue.style.opacity = clamp(1-hp*1.6, 0, 1).toFixed(3);
+    S.lastHero = true;
+  }else if(introDone && S.lastHero){
+    S.lastHero = false;
+    heroContent.style.opacity = 0;
+    if(scrollCue) scrollCue.style.opacity = 0;
+  }
+
+  const tLight = wordsTop < scrollY + NAV_H && wordsBottom > scrollY;
+  const bLight = wordsTop < scrollY + vh - HUD_H && wordsBottom > scrollY + vh - HUD_H;
+  if(tLight !== S.tState){ S.tState = tLight; body.classList.toggle('t-light', tLight); }
+  if(bLight !== S.bState){ S.bState = bLight; body.classList.toggle('b-light', bLight); }
+
+  requestAnimationFrame(engine);
+}
+document.addEventListener('visibilitychange', () => {
+  const was = running;
+  running = !document.hidden;
+  if(running && !was) requestAnimationFrame(engine);
+});
+
+measure();
+addEventListener('load', measure);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+let rzT;
+addEventListener('resize', () => { clearTimeout(rzT); rzT = setTimeout(measure, 150); }, { passive:true });
+if(hasGsap) ScrollTrigger.addEventListener('refresh', measure);
+
+/* ---------- PRELOADER + HERO INTRO ---------- */
+const heroIntro = () => {
+  document.documentElement.classList.remove('lock');
+  if(!hasGsap){ introDone = true; return; }
+  gsap.timeline({ onComplete(){ introDone = true; } })
+    .fromTo('#hero h1 .li', { yPercent:112 }, { yPercent:0, duration:1.25, ease:'power4.out', stagger:.12 })
+    .to('#hero [data-fade]', { autoAlpha:1, duration:1, ease:'power2.out', stagger:.07 }, '-=0.9');
+};
+(() => {
+  const pre = document.getElementById('preloader');
+  if(!hasGsap){
+    document.querySelectorAll('.li').forEach(e => e.style.transform='');
+    pre.remove(); heroIntro(); return;
+  }
+  gsap.set('[data-fade]', { autoAlpha:0 });
+  const preTc = document.getElementById('pre-tc');
+  const tcObj = { p:0 };
+  const tl = gsap.timeline({ onComplete(){ pre.remove(); } });
+  tl.fromTo('.pre-name .li', { yPercent:110 }, { yPercent:0, duration:.9, ease:'power4.out' })
+    .to(tcObj, { p:1, duration:1.15, ease:'power1.in',
+        onUpdate(){ preTc.textContent = tcFromFrames((tcObj.p*TOTAL_SECONDS*24)|0); } }, 0)
+    .to('.pre-center', { autoAlpha:0, duration:.45, ease:'power2.in' }, '+=0.15')
+    .to('.shutter.top',    { yPercent:-101, duration:1.05, ease:'power4.inOut' }, '<')
+    .to('.shutter.bottom', { yPercent: 101, duration:1.05, ease:'power4.inOut' }, '<')
+    .add(heroIntro, '-=0.55');
+  pre.addEventListener('click', () => tl.progress(0.75));
+})();
+
+/* ---------- SCROLLTRIGGER SCENES ---------- */
+if(hasGsap){
+  gsap.utils.toArray('h2 .li').forEach(el => {
+    gsap.fromTo(el, { yPercent:112 }, { yPercent:0, duration:1.2, ease:'power4.out',
+      scrollTrigger:{ trigger: el, start:'top 88%' } });
+  });
+  gsap.utils.toArray('[data-fade]:not(.hero-slate):not(.hero-scroll):not(.hero-est)').forEach(el => {
+    gsap.fromTo(el, { y:28, autoAlpha:0 }, { y:0, autoAlpha:1, duration:1, ease:'power3.out',
+      scrollTrigger:{ trigger: el, start:'top 88%' } });
+  });
+  gsap.utils.toArray('[data-count]').forEach(el => {
+    const end = +el.dataset.count;
+    gsap.fromTo(el, { innerText:0 }, { innerText:end, duration:1.6, ease:'power2.out', snap:{innerText:1},
+      scrollTrigger:{ trigger: el, start:'top 85%' } });
+  });
+
+  const track = document.getElementById('films-track');
+  const dist = () => Math.max(0, track.scrollWidth - innerWidth + innerWidth*0.08);
+  gsap.timeline({
+    scrollTrigger:{
+      trigger:'#films', start:'top top', end:() => '+=' + dist(),
+      scrub: reduceMotion ? true : 0.35, pin:true, anticipatePin:1, invalidateOnRefresh:true,
+    }
+  }).to(track, { x:() => -dist(), ease:'none' }, 0)
+    .fromTo('.film-card', { y:36, autoAlpha:.35 }, { y:0, autoAlpha:1, stagger:.06, ease:'none' }, 0)
+    .fromTo('.film-end',  { y:36, autoAlpha:.35 }, { y:0, autoAlpha:1, ease:'none' }, 0);
+
+  const sceneEl = document.getElementById('scene-label');
+  [['#hero','SCENE 00'],
+   ['#about','SCENE 01'],
+   ['#films','SCENE 02'],
+   ['#process','SCENE 03'],
+   ['#reviews','SCENE 04'],
+   ['#contact','SCENE 05']
+  ].forEach(([sel,label]) => {
+    ScrollTrigger.create({ trigger:sel, start:'top 55%', end:'bottom 45%',
+      onToggle(self){ if(self.isActive) sceneEl.textContent = label; } });
+  });
+}
+
+requestAnimationFrame(engine);
+</script>
+</body>
+</html>
