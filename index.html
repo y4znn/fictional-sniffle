@@ -17,7 +17,7 @@
   --brass:#c59d63;
   --red:#e33b30;
   --mut:#8d8474;
-  --mut-dim:#5f594d;   /* FIX: token restored */
+  --mut-dim:#5f594d;
   --line:#2a2620;
   --ink-on-light:#161310;
   --serif:'Fraunces', Georgia, serif;
@@ -121,19 +121,17 @@ body.b-light{--chrome-b:var(--ink-on-light)}
 /* ============ HERO ============ */
 #hero{position:relative;height:100vh;height:100svh;overflow:hidden;display:flex;
   align-items:center;justify-content:center}
-.hero-media{position:absolute;inset:0;overflow:hidden;background:var(--bg)}
-.hero-media img,.hero-media video{position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;filter:grayscale(.3) contrast(1.1) brightness(.72) sepia(.22) saturate(1.05)}
-#hero-poster{transform:scale(1.08);will-change:transform}
-.hero-media video{opacity:0;transition:opacity 1.4s ease}
+.hero-media{position:absolute;inset:0;overflow:hidden;background:var(--bg);will-change:transform}
+.hero-media video{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;filter:grayscale(.3) contrast(1.1) brightness(.72) sepia(.22) saturate(1.05);
+  opacity:0;transition:opacity 1.4s ease}
 .hero-media video.on{opacity:1}
+/* Vertical clip on a wide screen: framed, letterboxed — a title card, not a crop */
+@media (orientation:landscape) and (min-width:901px){
+  .hero-media.is-portrait video{object-fit:contain}
+}
 .hero-media::after{content:"";position:absolute;inset:0;
   background:radial-gradient(ellipse at center, transparent 42%, rgba(5,4,3,.62) 100%)}
-/* Desktop + vertical hero clip: blurred still as ambient bed, sharp clip framed on top */
-@media (orientation:landscape) and (min-width:901px){
-  .hero-media img{object-fit:cover;filter:blur(30px) brightness(.4) saturate(1.15)}
-  .hero-media video{object-fit:contain}
-}
 .hero-content{position:relative;z-index:3;text-align:center;padding:0 20px;will-change:transform,opacity}
 .hero-slate{color:var(--ivory);opacity:.75;margin-bottom:2.2rem}
 .hero-slate .rule{display:inline-block;width:34px;height:1px;background:var(--brass);
@@ -181,27 +179,23 @@ h2 em{color:var(--brass)}
 .film-card{flex:none;width:clamp(300px,52vw,720px);display:block}
 .film-card:nth-child(even){transform:translateY(4vh)}
 .film-frame{position:relative;aspect-ratio:2.35/1;overflow:hidden;background:var(--panel)}
-.film-poster{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;
-  filter:grayscale(.4) contrast(1.08) brightness(.78) sepia(.25);
-  transform:scale(1.03);
-  transition:transform 1.2s cubic-bezier(.19,1,.22,1)}
 .film-frame video{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;
-  opacity:0;transition:opacity .5s ease}
+  opacity:0;transition:opacity .6s ease}
+.film-frame video.has-frame{opacity:1}
 .film-card:hover .film-frame video{opacity:1}
 .film-frame::after{content:"";position:absolute;inset:0;z-index:4;box-shadow:inset 0 0 110px rgba(0,0,0,.55)}
 .film-grade{position:absolute;inset:0;z-index:2;background:#c9973f;mix-blend-mode:soft-light;opacity:.32;
   transition:opacity 1.2s ease}
-.film-card:hover .film-poster{transform:scale(1.09)}
 .film-card:hover .film-grade{opacity:.14}
 .film-tc{position:absolute;right:14px;bottom:12px;z-index:3;font-family:var(--mono);font-size:.62rem;
   letter-spacing:.14em;color:var(--ivory);opacity:.85;text-shadow:0 1px 6px rgba(0,0,0,.7)}
+@media (hover:none){.film-tc{display:none}}
 .film-meta{display:flex;align-items:baseline;gap:1.4rem;margin-top:1.3rem}
 .film-idx{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;color:var(--mut);transition:color .4s}
 .film-card:hover .film-idx{color:var(--brass)}
 .film-title{font-size:clamp(1.4rem,2.4vw,2rem);font-weight:400}
 .film-title em{color:var(--brass)}
-.film-loc{margin-left:auto;font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;color:var(--mut)}
-/* Portrait videos reshape their own card — the layout survives whatever gets uploaded */
+/* Portrait files reshape their own card */
 .film-card.is-portrait{width:clamp(240px,30vw,420px)}
 .film-card.is-portrait .film-frame{aspect-ratio:9/16}
 .film-end{flex:none;width:clamp(280px,38vw,520px);aspect-ratio:2.35/1;border:1px solid var(--line);
@@ -278,7 +272,6 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
   .film-card{width:78vw}
   .film-card.is-portrait{width:52vw}
   .film-card:nth-child(even){transform:none}
-  .film-loc{display:none}
   .films-head{flex-direction:column;align-items:flex-start;gap:1rem}
 }
 @media (prefers-reduced-motion:reduce){
@@ -332,9 +325,7 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
 <main>
   <!-- ======= HERO ======= -->
   <section id="hero">
-    <div class="hero-media" id="hero-media">
-      <img id="hero-poster" src="https://picsum.photos/seed/haydar-opening/1920/1080.jpg" alt="" fetchpriority="high" decoding="async">
-    </div>
+    <div class="hero-media" id="hero-media"></div>
     <div class="hero-content" id="hero-content">
       <p class="mono hero-slate" data-fade>FILMMAKER <span class="rule"></span> EDITOR — LEBANON</p>
       <h1 aria-label="Haydar Ghosn">
@@ -370,6 +361,16 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
   </section>
 
   <!-- ======= SCENE 02 · WORK ======= -->
+  <!--
+    FILENAMES: spaces must be written %20 and & must be %26.
+    Current files, correctly encoded:
+      videos/hero.mp4                    (fashion reel — also scrubs the hero)
+      videos/ali%20%26%20marwa.mp4
+      videos/joe%20%26%20mira.mp4
+      videos/lara%20%26%20rabih.mp4
+    Cleaner long-term: rename files to ali-marwa.mp4 etc. (a rename is not a
+    re-encode) and update the data-video lines below to match.
+  -->
   <section id="films" class="scene dark">
     <div class="films-sticky">
       <div class="films-head">
@@ -384,51 +385,43 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
       <div class="films-track" id="films-track">
         <a class="film-card" data-cursor="play" data-video="videos/hero.mp4" href="https://www.instagram.com/" target="_blank" rel="noopener">
           <div class="film-frame">
-            <div class="film-poster" style="background-image:url('https://picsum.photos/seed/hg-fashion/1400/600.jpg')"></div>
             <div class="film-grade"></div>
-            <span class="film-tc">00:00:24</span>
+            <span class="film-tc">--:--</span>
           </div>
           <div class="film-meta">
             <span class="film-idx">01 — FASHION</span>
             <h3 class="film-title">Editorial <em>reel</em></h3>
-            <span class="film-loc">LEBANON</span>
           </div>
         </a>
-        <!-- TODO: swap couple names + posters with real ones -->
-        <a class="film-card" data-cursor="play" data-video="videos/film-01.mp4" href="https://www.instagram.com/reel/DaYykpbMx-Z/" target="_blank" rel="noopener">
+        <!-- TODO: point each card at its Instagram reel -->
+        <a class="film-card" data-cursor="play" data-video="videos/ali%20%26%20marwa.mp4" href="https://www.instagram.com/reel/DaYykpbMx-Z/" target="_blank" rel="noopener">
           <div class="film-frame">
-            <div class="film-poster" style="background-image:url('https://picsum.photos/seed/hg-reel-one/1400/600.jpg')"></div>
             <div class="film-grade"></div>
-            <span class="film-tc">00:03:47</span>
+            <span class="film-tc">--:--</span>
           </div>
           <div class="film-meta">
             <span class="film-idx">02 — WEDDING</span>
-            <h3 class="film-title">Nour <em>&amp;</em> Karim</h3>
-            <span class="film-loc">BEIRUT</span>
+            <h3 class="film-title">Ali <em>&amp;</em> Marwa</h3>
           </div>
         </a>
-        <a class="film-card" data-cursor="play" data-video="videos/film-02.mp4" href="https://www.instagram.com/reel/Da5voI0s3pL/" target="_blank" rel="noopener">
+        <a class="film-card" data-cursor="play" data-video="videos/joe%20%26%20mira.mp4" href="https://www.instagram.com/reel/Da5voI0s3pL/" target="_blank" rel="noopener">
           <div class="film-frame">
-            <div class="film-poster" style="background-image:url('https://picsum.photos/seed/hg-reel-two/1400/600.jpg')"></div>
             <div class="film-grade"></div>
-            <span class="film-tc">00:02:58</span>
+            <span class="film-tc">--:--</span>
           </div>
           <div class="film-meta">
             <span class="film-idx">03 — WEDDING</span>
-            <h3 class="film-title">Yara <em>&amp;</em> Elie</h3>
-            <span class="film-loc">MOUNT LEBANON</span>
+            <h3 class="film-title">Joe <em>&amp;</em> Mira</h3>
           </div>
         </a>
-        <a class="film-card" data-cursor="play" data-video="videos/film-03.mp4" href="https://www.instagram.com/reel/DcrbUrDOnd7/" target="_blank" rel="noopener">
+        <a class="film-card" data-cursor="play" data-video="videos/lara%20%26%20rabih.mp4" href="https://www.instagram.com/reel/DcrbUrDOnd7/" target="_blank" rel="noopener">
           <div class="film-frame">
-            <div class="film-poster" style="background-image:url('https://picsum.photos/seed/hg-reel-three/1400/600.jpg')"></div>
             <div class="film-grade"></div>
-            <span class="film-tc">00:04:12</span>
+            <span class="film-tc">--:--</span>
           </div>
           <div class="film-meta">
             <span class="film-idx">04 — WEDDING</span>
-            <h3 class="film-title">Layal <em>&amp;</em> Rami</h3>
-            <span class="film-loc">BATROUN</span>
+            <h3 class="film-title">Lara <em>&amp;</em> Rabih</h3>
           </div>
         </a>
         <!-- TODO: Instagram profile link -->
@@ -536,14 +529,21 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
 /* ================================================================
-   HAYDAR GHOSN — ENGINE (hardened)
-   - Preloader failsafe: can never trap the page, even if a CDN dies
-   - GSAP guard: site degrades gracefully instead of crashing
-   - Film cards auto-detect portrait/landscape and reshape themselves
-   - Missing video = silent fallback to poster, never a broken layout
+   HAYDAR GHOSN — ENGINE
+   Fixes in this build:
+   - page always opens at the top (scroll restoration disabled)
+   - hero video actually scrubs on scroll (regression restored)
+   - hero adapts to horizontal OR vertical file automatically
+   - cards read your real filenames (URL-encoded) and show real
+     first frames + real durations
 ================================================================ */
+
+/* start at the top, always */
+if('scrollRestoration' in history) history.scrollRestoration = 'manual';
+window.scrollTo({ top:0, behavior:'instant' });
+
 const CONFIG = {
-  heroVideo: 'videos/hero.mp4',   // set to '' to keep the poster only
+  heroVideo: 'videos/hero.mp4',   // set to '' to disable the hero video
 };
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -592,14 +592,18 @@ if(!finePointer){
   });
 }
 
-/* ---------- HERO VIDEO ---------- */
+/* ---------- HERO VIDEO (loads, fades in, scrubs with scroll) ---------- */
 const heroMedia = document.getElementById('hero-media');
-const heroPoster = document.getElementById('hero-poster');
 let heroVideo = null, videoReady = false;
 if(CONFIG.heroVideo){
   heroVideo = document.createElement('video');
   Object.assign(heroVideo, { src: CONFIG.heroVideo, muted: true, playsInline: true, preload: 'auto' });
   heroVideo.setAttribute('muted',''); heroVideo.setAttribute('playsinline','');
+  heroVideo.addEventListener('loadedmetadata', () => {
+    /* orientation-aware treatment */
+    heroMedia.classList.add(heroVideo.videoHeight > heroVideo.videoWidth ? 'is-portrait' : 'is-landscape');
+    if(hasGsap) requestAnimationFrame(() => ScrollTrigger.refresh());
+  }, { once:true });
   heroVideo.addEventListener('canplaythrough', () => {
     videoReady = true;
     heroVideo.currentTime = 0.001;
@@ -609,23 +613,34 @@ if(CONFIG.heroVideo){
   heroMedia.appendChild(heroVideo);
 }
 
-/* ---------- WORK CARDS: previews + auto portrait/landscape ---------- */
+/* ---------- WORK CARDS: real frames, real durations, hover-play ---------- */
 document.querySelectorAll('.film-card[data-video]').forEach(card => {
   const v = document.createElement('video');
-  v.muted = true; v.playsInline = true; v.preload = 'metadata';
+  v.muted = true; v.playsInline = true;
+  v.preload = finePointer ? 'metadata' : 'none';
   v.setAttribute('muted',''); v.setAttribute('playsinline','');
   v.src = card.dataset.video;
   card.querySelector('.film-frame').appendChild(v);
   v.addEventListener('error', () => v.remove(), { once:true });
   v.addEventListener('loadedmetadata', () => {
+    /* real duration into the card's timecode */
+    const tc = card.querySelector('.film-tc');
+    if(tc && isFinite(v.duration)){
+      const m = Math.floor(v.duration/60), s = Math.floor(v.duration%60);
+      tc.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+    /* portrait file → reshape card */
     if(v.videoHeight > v.videoWidth){
       card.classList.add('is-portrait');
       if(hasGsap) requestAnimationFrame(() => ScrollTrigger.refresh());
     }
   }, { once:true });
+  /* desktop: pull a real frame from the file as the "poster" */
   if(finePointer){
+    v.addEventListener('loadedmetadata', () => { try{ v.currentTime = Math.min(0.5, (v.duration||1)*0.1); }catch(e){} });
+    v.addEventListener('seeked', () => v.classList.add('has-frame'), { once:true });
     card.addEventListener('mouseenter', () => { v.play().catch(()=>{}); });
-    card.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
+    card.addEventListener('mouseleave', () => { v.pause(); try{ v.currentTime = 0; }catch(e){} });
   }
 });
 
@@ -717,9 +732,16 @@ function engine(){
     }
   }
 
+  /* hero: parallax + THE MISSING SCRUB, only while it's on screen */
   if(introDone && S.smooth < vh*2.6){
     const sp = clamp(S.smooth/(vh*2), 0, 1);
-    heroPoster.style.transform = `translate3d(0,${(sp*-1.5).toFixed(2)}%,0) scale(${(1.08+sp*0.13).toFixed(4)})`;
+    heroMedia.style.transform = `translate3d(0,${(sp*-1.5).toFixed(2)}%,0) scale(${(1.08+sp*0.13).toFixed(4)})`;
+    if(heroVideo && videoReady && heroVideo.readyState >= 2){
+      const t = sp * Math.max(0.05, (heroVideo.duration || 5) - 0.15);
+      if(!heroVideo.seeking && Math.abs(t - heroVideo.currentTime) > 0.04){
+        try{ heroVideo.currentTime = t; }catch(e){}
+      }
+    }
     const hp = clamp(S.smooth/(vh*0.75), 0, 1);
     heroContent.style.transform = `translate3d(0,${(S.smooth*0.22).toFixed(1)}px,0)`;
     heroContent.style.opacity = (1-hp).toFixed(3);
@@ -754,6 +776,7 @@ if(hasGsap) ScrollTrigger.addEventListener('refresh', measure);
 /* ---------- PRELOADER + HERO INTRO ---------- */
 const heroIntro = () => {
   document.documentElement.classList.remove('lock');
+  window.scrollTo({ top:0, behavior:'instant' });
   if(!hasGsap){ introDone = true; return; }
   gsap.timeline({ onComplete(){ introDone = true; } })
     .fromTo('#hero h1 .li', { yPercent:112 }, { yPercent:0, duration:1.25, ease:'power4.out', stagger:.12 })
