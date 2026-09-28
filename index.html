@@ -17,6 +17,7 @@
   --brass:#c59d63;
   --red:#e33b30;
   --mut:#8d8474;
+  --mut-dim:#5f594d;   /* FIX: token restored */
   --line:#2a2620;
   --ink-on-light:#161310;
   --serif:'Fraunces', Georgia, serif;
@@ -112,6 +113,7 @@ body.b-light{--chrome-b:var(--ink-on-light)}
 .shutter.top{top:0}.shutter.bottom{bottom:0}
 .pre-center{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
   align-items:center;gap:1.4rem;z-index:2;text-align:center;padding:0 20px}
+.pre-sub{color:var(--mut-dim)}
 .pre-name{font-size:clamp(1.6rem,4.5vw,3rem);font-weight:400;letter-spacing:.06em}
 .pre-name em{color:var(--brass)}
 #pre-tc{color:var(--mut)}
@@ -119,7 +121,7 @@ body.b-light{--chrome-b:var(--ink-on-light)}
 /* ============ HERO ============ */
 #hero{position:relative;height:100vh;height:100svh;overflow:hidden;display:flex;
   align-items:center;justify-content:center}
-.hero-media{position:absolute;inset:0;overflow:hidden}
+.hero-media{position:absolute;inset:0;overflow:hidden;background:var(--bg)}
 .hero-media img,.hero-media video{position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;filter:grayscale(.3) contrast(1.1) brightness(.72) sepia(.22) saturate(1.05)}
 #hero-poster{transform:scale(1.08);will-change:transform}
@@ -127,10 +129,10 @@ body.b-light{--chrome-b:var(--ink-on-light)}
 .hero-media video.on{opacity:1}
 .hero-media::after{content:"";position:absolute;inset:0;
   background:radial-gradient(ellipse at center, transparent 42%, rgba(5,4,3,.62) 100%)}
-/* Vertical hero clip on desktop: framed, contained, edges melting into the dark.
-   On phones (portrait) it fills the screen natively — no treatment needed. */
+/* Desktop + vertical hero clip: blurred still as ambient bed, sharp clip framed on top */
 @media (orientation:landscape) and (min-width:901px){
-  .hero-media img,.hero-media video{object-fit:contain}
+  .hero-media img{object-fit:cover;filter:blur(30px) brightness(.4) saturate(1.15)}
+  .hero-media video{object-fit:contain}
 }
 .hero-content{position:relative;z-index:3;text-align:center;padding:0 20px;will-change:transform,opacity}
 .hero-slate{color:var(--ivory);opacity:.75;margin-bottom:2.2rem}
@@ -199,6 +201,9 @@ h2 em{color:var(--brass)}
 .film-title{font-size:clamp(1.4rem,2.4vw,2rem);font-weight:400}
 .film-title em{color:var(--brass)}
 .film-loc{margin-left:auto;font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;color:var(--mut)}
+/* Portrait videos reshape their own card — the layout survives whatever gets uploaded */
+.film-card.is-portrait{width:clamp(240px,30vw,420px)}
+.film-card.is-portrait .film-frame{aspect-ratio:9/16}
 .film-end{flex:none;width:clamp(280px,38vw,520px);aspect-ratio:2.35/1;border:1px solid var(--line);
   display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1.4rem;
   text-align:center;transition:border-color .5s,background .5s}
@@ -271,6 +276,7 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
   .act{grid-template-columns:1fr;gap:.8rem}
   .act-meta{text-align:left}
   .film-card{width:78vw}
+  .film-card.is-portrait{width:52vw}
   .film-card:nth-child(even){transform:none}
   .film-loc{display:none}
   .films-head{flex-direction:column;align-items:flex-start;gap:1rem}
@@ -327,7 +333,6 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
   <!-- ======= HERO ======= -->
   <section id="hero">
     <div class="hero-media" id="hero-media">
-      <!-- Fallback poster holds the frame until videos/hero.mp4 is buffered -->
       <img id="hero-poster" src="https://picsum.photos/seed/haydar-opening/1920/1080.jpg" alt="" fetchpriority="high" decoding="async">
     </div>
     <div class="hero-content" id="hero-content">
@@ -377,7 +382,6 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
         <p class="mono hint" data-fade>Keep scrolling</p>
       </div>
       <div class="films-track" id="films-track">
-        <!-- Fashion piece — same file as the hero, so it costs zero extra download -->
         <a class="film-card" data-cursor="play" data-video="videos/hero.mp4" href="https://www.instagram.com/" target="_blank" rel="noopener">
           <div class="film-frame">
             <div class="film-poster" style="background-image:url('https://picsum.photos/seed/hg-fashion/1400/600.jpg')"></div>
@@ -532,10 +536,11 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
 /* ================================================================
-   HAYDAR GHOSN — ENGINE
-   Videos are relative paths into videos/ — works locally (double-
-   click index.html) and on GitHub Pages / Netlify with no changes.
-   If a file is missing, the site silently falls back to its poster.
+   HAYDAR GHOSN — ENGINE (hardened)
+   - Preloader failsafe: can never trap the page, even if a CDN dies
+   - GSAP guard: site degrades gracefully instead of crashing
+   - Film cards auto-detect portrait/landscape and reshape themselves
+   - Missing video = silent fallback to poster, never a broken layout
 ================================================================ */
 const CONFIG = {
   heroVideo: 'videos/hero.mp4',   // set to '' to keep the poster only
@@ -543,7 +548,7 @@ const CONFIG = {
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const finePointer  = window.matchMedia('(pointer: fine)').matches;
-const hasGsap = typeof gsap !== 'undefined';
+const hasGsap = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
 const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
 if(hasGsap){
   gsap.registerPlugin(ScrollTrigger);
@@ -553,7 +558,7 @@ document.documentElement.classList.add('lock');
 const body = document.body;
 let introDone = false;
 
-/* ---------- FILM GRAIN (3 tiles, cycled by CSS) ---------- */
+/* ---------- FILM GRAIN ---------- */
 (() => {
   const host = document.getElementById('grain');
   const size = 140;
@@ -569,7 +574,7 @@ let introDone = false;
   }
 })();
 
-/* ---------- CUSTOM CURSOR (instant, positioned in the event) ---------- */
+/* ---------- CUSTOM CURSOR ---------- */
 const cursorEl = document.getElementById('cursor');
 if(!finePointer){
   cursorEl.remove();
@@ -587,7 +592,7 @@ if(!finePointer){
   });
 }
 
-/* ---------- HERO VIDEO (scroll-scrubbed) ---------- */
+/* ---------- HERO VIDEO ---------- */
 const heroMedia = document.getElementById('hero-media');
 const heroPoster = document.getElementById('hero-poster');
 let heroVideo = null, videoReady = false;
@@ -604,24 +609,28 @@ if(CONFIG.heroVideo){
   heroMedia.appendChild(heroVideo);
 }
 
-/* ---------- WORK CARDS: hover-to-play muted previews ---------- */
-/* preload="none": nothing downloads until the cursor actually lands on a card.
-   A missing file just errors out and removes itself — poster stays. */
-if(finePointer){
-  document.querySelectorAll('.film-card[data-video]').forEach(card => {
-    const v = document.createElement('video');
-    v.muted = true; v.playsInline = true; v.preload = 'none';
-    v.setAttribute('muted',''); v.setAttribute('playsinline','');
-    v.src = card.dataset.video;
-    card.querySelector('.film-frame').appendChild(v);
-    v.addEventListener('error', () => v.remove(), { once:true });
+/* ---------- WORK CARDS: previews + auto portrait/landscape ---------- */
+document.querySelectorAll('.film-card[data-video]').forEach(card => {
+  const v = document.createElement('video');
+  v.muted = true; v.playsInline = true; v.preload = 'metadata';
+  v.setAttribute('muted',''); v.setAttribute('playsinline','');
+  v.src = card.dataset.video;
+  card.querySelector('.film-frame').appendChild(v);
+  v.addEventListener('error', () => v.remove(), { once:true });
+  v.addEventListener('loadedmetadata', () => {
+    if(v.videoHeight > v.videoWidth){
+      card.classList.add('is-portrait');
+      if(hasGsap) requestAnimationFrame(() => ScrollTrigger.refresh());
+    }
+  }, { once:true });
+  if(finePointer){
     card.addEventListener('mouseenter', () => { v.play().catch(()=>{}); });
     card.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
-  });
-}
+  }
+});
 
 /* ================================================================
-   ENGINE — one loop, cached measurements, change-detection
+   ENGINE
 ================================================================ */
 const TOTAL_SECONDS = 168;
 const tcEl      = document.getElementById('tc');
@@ -686,7 +695,6 @@ let running = !document.hidden;
 function engine(){
   if(!running) return;
 
-  /* instruments read raw scroll (instant); imagery reads smoothed (weight) */
   S.smooth += (scrollY - S.smooth) * (reduceMotion ? 1 : 0.16);
   if(Math.abs(scrollY - S.smooth) < 0.05) S.smooth = scrollY;
 
@@ -770,6 +778,18 @@ const heroIntro = () => {
     .add(heroIntro, '-=0.55');
   pre.addEventListener('click', () => tl.progress(0.75));
 })();
+
+/* FAILSAFE: no matter what fails above, the page unlocks within 5s */
+setTimeout(() => {
+  const p = document.getElementById('preloader');
+  if(p){
+    p.remove();
+    document.documentElement.classList.remove('lock');
+    document.querySelectorAll('.li').forEach(e => e.style.transform='');
+    document.querySelectorAll('[data-fade]').forEach(e => { e.style.opacity=1; e.style.visibility='visible'; });
+    introDone = true;
+  }
+}, 5000);
 
 /* ---------- SCROLLTRIGGER SCENES ---------- */
 if(hasGsap){
