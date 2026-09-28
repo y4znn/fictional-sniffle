@@ -118,21 +118,35 @@ body.b-light{--chrome-b:var(--ink-on-light)}
 .pre-name em{color:var(--brass)}
 #pre-tc{color:var(--mut)}
 
-/* ============ HERO ============ */
+/* ============ HERO — focus-pull ============ */
 #hero{position:relative;height:100vh;height:100svh;overflow:hidden;display:flex;
   align-items:center;justify-content:center}
-.hero-media{position:absolute;inset:0;overflow:hidden;background:var(--bg);will-change:transform}
+.hero-media{position:absolute;inset:0;overflow:hidden;background:var(--bg)}
 .hero-media video{position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;filter:grayscale(.3) contrast(1.1) brightness(.72) sepia(.22) saturate(1.05);
-  opacity:0;transition:opacity 1.4s ease}
+  object-fit:cover;opacity:0;transition:opacity 1.4s ease}
 .hero-media video.on{opacity:1}
-/* Vertical clip on a wide screen: framed, letterboxed — a title card, not a crop */
+/* blurred ambient bed — same file, abstracted */
+#hero-bg{filter:blur(34px) brightness(.45) saturate(1.25);
+  transform:scale(1.18);will-change:transform}
+/* sharp layer, revealed through the focus circle */
+#hero-fg{filter:grayscale(.25) contrast(1.08) brightness(.85) sepia(.15) saturate(1.1)}
 @media (orientation:landscape) and (min-width:901px){
-  .hero-media.is-portrait video{object-fit:contain}
+  .hero-media.is-portrait #hero-fg{object-fit:contain}
 }
+/* the focus circle — only on devices with a cursor + mask support */
+.has-focus #hero-fg{
+  -webkit-mask-image:radial-gradient(circle var(--fr,0px) at var(--fx,50%) var(--fy,50%),
+    #000 0%, #000 54%, transparent 98%);
+          mask-image:radial-gradient(circle var(--fr,0px) at var(--fx,50%) var(--fy,50%),
+    #000 0%, #000 54%, transparent 98%);
+}
+/* fallback if masks unsupported: blur the sharp layer itself */
+.no-mask #hero-fg{filter:blur(16px) brightness(.7) sepia(.15);
+  transition:filter .9s ease}
+.no-mask #hero.is-focused #hero-fg{filter:grayscale(.25) contrast(1.08) brightness(.85) sepia(.15)}
 .hero-media::after{content:"";position:absolute;inset:0;
   background:radial-gradient(ellipse at center, transparent 42%, rgba(5,4,3,.62) 100%)}
-.hero-content{position:relative;z-index:3;text-align:center;padding:0 20px;will-change:transform,opacity}
+.hero-content{position:relative;z-index:3;text-align:center;padding:0 20px;will-change:transform,opacity;pointer-events:none}
 .hero-slate{color:var(--ivory);opacity:.75;margin-bottom:2.2rem}
 .hero-slate .rule{display:inline-block;width:34px;height:1px;background:var(--brass);
   vertical-align:middle;margin:0 14px}
@@ -190,12 +204,13 @@ h2 em{color:var(--brass)}
 .film-tc{position:absolute;right:14px;bottom:12px;z-index:3;font-family:var(--mono);font-size:.62rem;
   letter-spacing:.14em;color:var(--ivory);opacity:.85;text-shadow:0 1px 6px rgba(0,0,0,.7)}
 @media (hover:none){.film-tc{display:none}}
+.film-card.is-offline .film-frame{opacity:.4}
+.film-card.is-offline .film-tc{color:var(--red);opacity:1}
 .film-meta{display:flex;align-items:baseline;gap:1.4rem;margin-top:1.3rem}
 .film-idx{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;color:var(--mut);transition:color .4s}
 .film-card:hover .film-idx{color:var(--brass)}
 .film-title{font-size:clamp(1.4rem,2.4vw,2rem);font-weight:400}
 .film-title em{color:var(--brass)}
-/* Portrait files reshape their own card */
 .film-card.is-portrait{width:clamp(240px,30vw,420px)}
 .film-card.is-portrait .film-frame{aspect-ratio:9/16}
 .film-end{flex:none;width:clamp(280px,38vw,520px);aspect-ratio:2.35/1;border:1px solid var(--line);
@@ -335,7 +350,7 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
       <p class="mono hero-services" data-fade>WEDDINGS <b>—</b> FASHION <b>—</b> COMMERCIALS <b>—</b> BRANDS <b>—</b> EVENTS</p>
     </div>
     <div class="hero-scroll" data-fade>
-      <span class="mono">Scroll</span>
+      <span class="mono" id="cue-label">SCROLL</span>
       <span class="tick"></span>
     </div>
     <p class="mono hero-est" data-fade>EST. 2019 — 100+ WEDDINGS</p>
@@ -361,16 +376,6 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
   </section>
 
   <!-- ======= SCENE 02 · WORK ======= -->
-  <!--
-    FILENAMES: spaces must be written %20 and & must be %26.
-    Current files, correctly encoded:
-      videos/hero.mp4                    (fashion reel — also scrubs the hero)
-      videos/ali%20%26%20marwa.mp4
-      videos/joe%20%26%20mira.mp4
-      videos/lara%20%26%20rabih.mp4
-    Cleaner long-term: rename files to ali-marwa.mp4 etc. (a rename is not a
-    re-encode) and update the data-video lines below to match.
-  -->
   <section id="films" class="scene dark">
     <div class="films-sticky">
       <div class="films-head">
@@ -530,15 +535,14 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
 <script>
 /* ================================================================
    HAYDAR GHOSN — ENGINE
-   Fixes in this build:
-   - page always opens at the top (scroll restoration disabled)
-   - hero video actually scrubs on scroll (regression restored)
-   - hero adapts to horizontal OR vertical file automatically
-   - cards read your real filenames (URL-encoded) and show real
-     first frames + real durations
+   This build:
+   - HERO: plays on hover (pauses on leave), rendered TWICE from the
+     same file — a blurred ambient bed behind, and a sharp layer on
+     top revealed through a "focus circle" that follows the cursor
+     (rack focus). Touch devices: plays ambient, no circle needed.
+   - CARDS: more robust hover-play + a visible NO SIGNAL marker on
+     any file that fails to load or decode.
 ================================================================ */
-
-/* start at the top, always */
 if('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.scrollTo({ top:0, behavior:'instant' });
 
@@ -557,6 +561,12 @@ if(hasGsap){
 document.documentElement.classList.add('lock');
 const body = document.body;
 let introDone = false;
+
+/* mask support detection → has-focus / no-mask classes */
+const maskOK = ('maskImage' in document.documentElement.style) ||
+               ('webkitMaskImage' in document.documentElement.style);
+if(finePointer && maskOK) document.documentElement.classList.add('has-focus');
+else document.documentElement.classList.add('no-mask');
 
 /* ---------- FILM GRAIN ---------- */
 (() => {
@@ -592,28 +602,77 @@ if(!finePointer){
   });
 }
 
-/* ---------- HERO VIDEO (loads, fades in, scrubs with scroll) ---------- */
-const heroMedia = document.getElementById('hero-media');
-let heroVideo = null, videoReady = false;
-if(CONFIG.heroVideo){
-  heroVideo = document.createElement('video');
-  Object.assign(heroVideo, { src: CONFIG.heroVideo, muted: true, playsInline: true, preload: 'auto' });
-  heroVideo.setAttribute('muted',''); heroVideo.setAttribute('playsinline','');
-  heroVideo.addEventListener('loadedmetadata', () => {
-    /* orientation-aware treatment */
-    heroMedia.classList.add(heroVideo.videoHeight > heroVideo.videoWidth ? 'is-portrait' : 'is-landscape');
-    if(hasGsap) requestAnimationFrame(() => ScrollTrigger.refresh());
-  }, { once:true });
-  heroVideo.addEventListener('canplaythrough', () => {
-    videoReady = true;
-    heroVideo.currentTime = 0.001;
-    heroVideo.classList.add('on');
-  }, { once:true });
-  heroVideo.addEventListener('error', () => { heroVideo = null; }, { once:true });
-  heroMedia.appendChild(heroVideo);
-}
+/* ================================================================
+   HERO — two layers, one file; hover = play + focus pull
+================================================================ */
+const heroSection = document.getElementById('hero');
+const heroMedia   = document.getElementById('hero-media');
+const heroContent = document.getElementById('hero-content');
+const cueLabel    = document.getElementById('cue-label');
+let heroBg = null, heroFg = null;
+const heroState = {
+  hovered:false, r:0, tr:0,
+  fx:.5, fy:.5, mx:0, my:0,
+};
 
-/* ---------- WORK CARDS: real frames, real durations, hover-play ---------- */
+if(CONFIG.heroVideo){
+  const mk = () => {
+    const v = document.createElement('video');
+    v.muted = true; v.playsInline = true; v.loop = true; v.preload = 'auto';
+    v.setAttribute('muted',''); v.setAttribute('playsinline','');
+    v.src = CONFIG.heroVideo;
+    v.addEventListener('error', () => {
+      v.remove(); heroBg = heroFg = null;
+      cueLabel.textContent = 'SCROLL';
+    }, { once:true });
+    return v;
+  };
+  heroBg = mk(); heroBg.id = 'hero-bg';
+  heroFg = mk(); heroFg.id = 'hero-fg';
+  heroMedia.append(heroBg, heroFg);
+
+  heroFg.addEventListener('loadedmetadata', () => {
+    heroMedia.classList.add(heroFg.videoHeight > heroFg.videoWidth ? 'is-portrait' : 'is-landscape');
+    if(hasGsap) requestAnimationFrame(() => ScrollTrigger.refresh());
+    /* rest on a representative frame, not a possible black first frame */
+    const t = (heroFg.duration || 2) * 0.1;
+    try{ heroFg.currentTime = t; heroBg.currentTime = t; }catch(e){}
+  }, { once:true });
+  const onReady = () => { heroFg.classList.add('on'); heroBg.classList.add('on'); };
+  heroFg.addEventListener('canplaythrough', onReady, { once:true });
+
+  if(finePointer){
+    heroSection.addEventListener('mouseenter', e => {
+      heroState.hovered = true;
+      heroState.tr = clamp(innerWidth*0.26, 220, 380);
+      const r = heroSection.getBoundingClientRect();
+      heroState.mx = e.clientX; heroState.my = e.clientY;
+      heroState.fx = clamp((e.clientX-r.left)/r.width, 0, 1);
+      heroState.fy = clamp((e.clientY-r.top)/r.height, 0, 1);
+      heroSection.classList.add('is-focused');
+      cueLabel.textContent = 'HOVER TO FOCUS';
+      heroBg.play().catch(()=>{}); heroFg.play().catch(()=>{});
+    });
+    heroSection.addEventListener('mousemove', e => {
+      heroState.mx = e.clientX; heroState.my = e.clientY;
+    }, { passive:true });
+    heroSection.addEventListener('mouseleave', () => {
+      heroState.hovered = false;
+      heroState.tr = 0;
+      heroSection.classList.remove('is-focused');
+      cueLabel.textContent = 'SCROLL';
+      heroBg.pause(); heroFg.pause();
+    });
+  }else{
+    /* touch: ambient autoplay, sharp, no focus circle needed */
+    cueLabel.textContent = 'SCROLL';
+    const both = () => { heroBg.play().catch(()=>{}); heroFg.play().catch(()=>{}); };
+    heroFg.addEventListener('canplaythrough', both, { once:true });
+  }
+}
+if(finePointer && maskOK) cueLabel.textContent = 'HOVER TO FOCUS';
+
+/* ---------- WORK CARDS: previews, durations, NO SIGNAL on failure ---------- */
 document.querySelectorAll('.film-card[data-video]').forEach(card => {
   const v = document.createElement('video');
   v.muted = true; v.playsInline = true;
@@ -621,26 +680,35 @@ document.querySelectorAll('.film-card[data-video]').forEach(card => {
   v.setAttribute('muted',''); v.setAttribute('playsinline','');
   v.src = card.dataset.video;
   card.querySelector('.film-frame').appendChild(v);
-  v.addEventListener('error', () => v.remove(), { once:true });
+
+  const tc = card.querySelector('.film-tc');
+  let hovered = false;
+  const tryPlay = () => { if(hovered){ const p = v.play(); if(p && p.catch) p.catch(()=>{}); } };
+
+  v.addEventListener('error', () => {
+    /* file missing (wrong name/path) or undecodable (usually HEVC) */
+    card.classList.add('is-offline');
+    if(tc) tc.textContent = 'NO SIGNAL';
+    v.remove();
+  }, { once:true });
+
   v.addEventListener('loadedmetadata', () => {
-    /* real duration into the card's timecode */
-    const tc = card.querySelector('.film-tc');
     if(tc && isFinite(v.duration)){
       const m = Math.floor(v.duration/60), s = Math.floor(v.duration%60);
       tc.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
     }
-    /* portrait file → reshape card */
     if(v.videoHeight > v.videoWidth){
       card.classList.add('is-portrait');
       if(hasGsap) requestAnimationFrame(() => ScrollTrigger.refresh());
     }
   }, { once:true });
-  /* desktop: pull a real frame from the file as the "poster" */
+
   if(finePointer){
-    v.addEventListener('loadedmetadata', () => { try{ v.currentTime = Math.min(0.5, (v.duration||1)*0.1); }catch(e){} });
+    v.addEventListener('loadedmetadata', () => { try{ v.currentTime = Math.min(0.5,(v.duration||1)*0.1); }catch(e){} });
     v.addEventListener('seeked', () => v.classList.add('has-frame'), { once:true });
-    card.addEventListener('mouseenter', () => { v.play().catch(()=>{}); });
-    card.addEventListener('mouseleave', () => { v.pause(); try{ v.currentTime = 0; }catch(e){} });
+    v.addEventListener('canplay', tryPlay);
+    card.addEventListener('mouseenter', () => { hovered = true; tryPlay(); });
+    card.addEventListener('mouseleave', () => { hovered = false; v.pause(); try{ v.currentTime = 0; }catch(e){} });
   }
 });
 
@@ -651,7 +719,6 @@ const TOTAL_SECONDS = 168;
 const tcEl      = document.getElementById('tc');
 const railHead  = document.getElementById('rail-head');
 const railTrack = document.getElementById('rail-track');
-const heroContent = document.getElementById('hero-content');
 const scrollCue = document.querySelector('.hero-scroll');
 const NAV_H = 84, HUD_H = 72;
 const pad = n => String(n).padStart(2,'0');
@@ -732,25 +799,33 @@ function engine(){
     }
   }
 
-  /* hero: parallax + THE MISSING SCRUB, only while it's on screen */
-  if(introDone && S.smooth < vh*2.6){
-    const sp = clamp(S.smooth/(vh*2), 0, 1);
-    heroMedia.style.transform = `translate3d(0,${(sp*-1.5).toFixed(2)}%,0) scale(${(1.08+sp*0.13).toFixed(4)})`;
-    if(heroVideo && videoReady && heroVideo.readyState >= 2){
-      const t = sp * Math.max(0.05, (heroVideo.duration || 5) - 0.15);
-      if(!heroVideo.seeking && Math.abs(t - heroVideo.currentTime) > 0.04){
-        try{ heroVideo.currentTime = t; }catch(e){}
+  if(introDone){
+    /* blurred bed drifts slightly on scroll; sharp layer stays put */
+    if(heroBg && S.smooth < vh*2.2){
+      const sp = clamp(S.smooth/(vh*2), 0, 1);
+      heroBg.style.transform = `translate3d(0,${(sp*-4).toFixed(2)}%,0) scale(${(1.18+sp*0.1).toFixed(4)})`;
+      S.lastHero = true;
+    }else if(!heroBg && S.lastHero){ S.lastHero = false; }
+
+    /* focus pull — lerped like a real focus ring, hover-scoped */
+    if(heroFg && (heroState.hovered || heroState.r > 0.5)){
+      const lerpP = reduceMotion ? 1 : 0.28;
+      const lerpR = reduceMotion ? 1 : 0.10;
+      if(heroState.hovered){
+        const r = heroSection.getBoundingClientRect();
+        heroState.fx += (clamp((heroState.mx-r.left)/r.width,0,1)  - heroState.fx) * lerpP;
+        heroState.fy += (clamp((heroState.my-r.top)/r.height,0,1) - heroState.fy) * lerpP;
       }
+      heroState.r += (heroState.tr - heroState.r) * lerpR;
+      heroFg.style.setProperty('--fx', (heroState.fx*100).toFixed(2) + '%');
+      heroFg.style.setProperty('--fy', (heroState.fy*100).toFixed(2) + '%');
+      heroFg.style.setProperty('--fr', heroState.r.toFixed(1) + 'px');
     }
+
     const hp = clamp(S.smooth/(vh*0.75), 0, 1);
     heroContent.style.transform = `translate3d(0,${(S.smooth*0.22).toFixed(1)}px,0)`;
     heroContent.style.opacity = (1-hp).toFixed(3);
     if(scrollCue) scrollCue.style.opacity = clamp(1-hp*1.6, 0, 1).toFixed(3);
-    S.lastHero = true;
-  }else if(introDone && S.lastHero){
-    S.lastHero = false;
-    heroContent.style.opacity = 0;
-    if(scrollCue) scrollCue.style.opacity = 0;
   }
 
   const tLight = wordsTop < scrollY + NAV_H && wordsBottom > scrollY;
