@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Haydar Ghosn — Wedding Filmmaker, Lebanon</title>
-<meta name="description" content="Wedding films by Haydar Ghosn. Based in Lebanon, filming worldwide. 100+ weddings filmed since 2019.">
+<title>Haydar Ghosn — Filmmaker & Editor, Lebanon</title>
+<meta name="description" content="Haydar Ghosn — filmmaker and editor based in Lebanon. Weddings, fashion, commercials and brand films. 100+ weddings filmed since 2019.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230c0a08'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23e33b30'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -115,7 +115,6 @@ body.b-light{--chrome-b:var(--ink-on-light)}
 .pre-name{font-size:clamp(1.6rem,4.5vw,3rem);font-weight:400;letter-spacing:.06em}
 .pre-name em{color:var(--brass)}
 #pre-tc{color:var(--mut)}
-.pre-sub{color:var(--mut-dim)}
 
 /* ============ HERO ============ */
 #hero{position:relative;height:100vh;height:100svh;overflow:hidden;display:flex;
@@ -127,13 +126,20 @@ body.b-light{--chrome-b:var(--ink-on-light)}
 .hero-media video{opacity:0;transition:opacity 1.4s ease}
 .hero-media video.on{opacity:1}
 .hero-media::after{content:"";position:absolute;inset:0;
-  background:radial-gradient(ellipse at center, transparent 45%, rgba(5,4,3,.55) 100%)}
+  background:radial-gradient(ellipse at center, transparent 42%, rgba(5,4,3,.62) 100%)}
+/* Vertical hero clip on desktop: framed, contained, edges melting into the dark.
+   On phones (portrait) it fills the screen natively — no treatment needed. */
+@media (orientation:landscape) and (min-width:901px){
+  .hero-media img,.hero-media video{object-fit:contain}
+}
 .hero-content{position:relative;z-index:3;text-align:center;padding:0 20px;will-change:transform,opacity}
 .hero-slate{color:var(--ivory);opacity:.75;margin-bottom:2.2rem}
 .hero-slate .rule{display:inline-block;width:34px;height:1px;background:var(--brass);
   vertical-align:middle;margin:0 14px}
 h1{font-size:clamp(3.4rem,12.5vw,11rem);line-height:.92;font-weight:400;letter-spacing:.01em}
 h1 .l2{font-style:italic;font-weight:300;margin-left:.08em}
+.hero-services{margin-top:2.2rem;color:var(--mut)}
+.hero-services b{color:var(--brass);font-weight:400}
 .hero-scroll{position:absolute;bottom:84px;left:50%;transform:translateX(-50%);z-index:3;
   display:flex;flex-direction:column;align-items:center;gap:.8rem;color:var(--mut)}
 .hero-scroll .tick{width:1px;height:44px;background:var(--mut-dim);overflow:hidden;position:relative}
@@ -162,7 +168,7 @@ h2 em{color:var(--brass)}
 .stat .num sup{font-size:.45em;color:var(--brass);font-style:italic}
 .stat .lbl{display:block;margin-top:.8rem;color:var(--mut)}
 
-/* ============ FILMS ============ */
+/* ============ WORK ============ */
 #films{height:100vh;height:100svh;padding:0;overflow:hidden}
 .films-sticky{height:100%;display:flex;flex-direction:column;justify-content:center}
 .films-head{display:flex;justify-content:space-between;align-items:flex-end;
@@ -173,17 +179,19 @@ h2 em{color:var(--brass)}
 .film-card{flex:none;width:clamp(300px,52vw,720px);display:block}
 .film-card:nth-child(even){transform:translateY(4vh)}
 .film-frame{position:relative;aspect-ratio:2.35/1;overflow:hidden;background:var(--panel)}
-.film-poster{position:absolute;inset:0;background-size:cover;background-position:center;
+.film-poster{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;
   filter:grayscale(.4) contrast(1.08) brightness(.78) sepia(.25);
   transform:scale(1.03);
   transition:transform 1.2s cubic-bezier(.19,1,.22,1)}
-.film-frame::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 110px rgba(0,0,0,.55)}
-.film-grade{position:absolute;inset:0;background:#c9973f;mix-blend-mode:soft-light;opacity:.32;
+.film-frame video{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity .5s ease}
+.film-card:hover .film-frame video{opacity:1}
+.film-frame::after{content:"";position:absolute;inset:0;z-index:4;box-shadow:inset 0 0 110px rgba(0,0,0,.55)}
+.film-grade{position:absolute;inset:0;z-index:2;background:#c9973f;mix-blend-mode:soft-light;opacity:.32;
   transition:opacity 1.2s ease}
-.film-card:hover .film-poster{transform:scale(1.09);
-  filter:grayscale(0) contrast(1.12) brightness(.95) sepia(.15) saturate(1.2)}
+.film-card:hover .film-poster{transform:scale(1.09)}
 .film-card:hover .film-grade{opacity:.14}
-.film-tc{position:absolute;right:14px;bottom:12px;font-family:var(--mono);font-size:.62rem;
+.film-tc{position:absolute;right:14px;bottom:12px;z-index:3;font-family:var(--mono);font-size:.62rem;
   letter-spacing:.14em;color:var(--ivory);opacity:.85;text-shadow:0 1px 6px rgba(0,0,0,.7)}
 .film-meta{display:flex;align-items:baseline;gap:1.4rem;margin-top:1.3rem}
 .film-idx{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;color:var(--mut);transition:color .4s}
@@ -308,7 +316,7 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
   <a href="#hero" class="wordmark">HAYDAR <em>GHOSN</em></a>
   <ul class="mono">
     <li><a href="#about">About</a></li>
-    <li><a href="#films">Films</a></li>
+    <li><a href="#films">Work</a></li>
     <li><a href="#process">Process</a></li>
     <li><a href="#reviews">Reviews</a></li>
     <li class="keep"><a href="#contact">Contact</a></li>
@@ -319,14 +327,16 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
   <!-- ======= HERO ======= -->
   <section id="hero">
     <div class="hero-media" id="hero-media">
+      <!-- Fallback poster holds the frame until videos/hero.mp4 is buffered -->
       <img id="hero-poster" src="https://picsum.photos/seed/haydar-opening/1920/1080.jpg" alt="" fetchpriority="high" decoding="async">
     </div>
     <div class="hero-content" id="hero-content">
-      <p class="mono hero-slate" data-fade>WEDDING FILMMAKER<span class="rule"></span>LEBANON</p>
+      <p class="mono hero-slate" data-fade>FILMMAKER <span class="rule"></span> EDITOR — LEBANON</p>
       <h1 aria-label="Haydar Ghosn">
         <span class="line"><span class="li" style="transform:translateY(112%)">HAYDAR</span></span>
         <span class="line"><span class="li l2" style="transform:translateY(112%)"><em>GHOSN</em></span></span>
       </h1>
+      <p class="mono hero-services" data-fade>WEDDINGS <b>—</b> FASHION <b>—</b> COMMERCIALS <b>—</b> BRANDS <b>—</b> EVENTS</p>
     </div>
     <div class="hero-scroll" data-fade>
       <span class="mono">Scroll</span>
@@ -339,13 +349,13 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
   <section id="about" class="scene dark">
     <p class="mono slate" data-fade><span class="rule"></span>SCENE 01 — ABOUT</p>
     <h2>
-      <span class="line"><span class="li">The day,</span></span>
-      <span class="line"><span class="li">as it <em>happened.</em></span></span>
+      <span class="line"><span class="li">One eye,</span></span>
+      <span class="line"><span class="li">every kind of <em>story.</em></span></span>
     </h2>
     <div class="grid">
       <div>
-        <p class="body" data-fade>I've filmed over one hundred weddings across Lebanon in the past five years. My films are cinematic and documentary at once — built from what actually happened, not from a script.</p>
-        <p class="body" data-fade>On the day I stay out of the way. In the edit I stay on it for weeks, until it plays the way the day felt.</p>
+        <p class="body" data-fade>I'm a filmmaker and editor based in Lebanon. Five years behind the camera — over a hundred weddings, plus fashion films, commercials and brand content.</p>
+        <p class="body" data-fade>Whatever the format, the approach doesn't change: film it honestly, cut it tight, grade it warm.</p>
       </div>
       <div class="stats">
         <div class="stat" data-fade><span class="num"><span data-count="100">100</span><sup>+</sup></span><span class="lbl mono">Weddings filmed</span></div>
@@ -354,57 +364,70 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
     </div>
   </section>
 
-  <!-- ======= SCENE 02 · FILMS ======= -->
+  <!-- ======= SCENE 02 · WORK ======= -->
   <section id="films" class="scene dark">
     <div class="films-sticky">
       <div class="films-head">
         <div>
-          <p class="mono slate" style="margin-bottom:1.6rem"><span class="rule"></span>SCENE 02 — FILMS</p>
+          <p class="mono slate" style="margin-bottom:1.6rem"><span class="rule"></span>SCENE 02 — WORK</p>
           <h2>
-            <span class="line"><span class="li">Selected <em>films.</em></span></span>
+            <span class="line"><span class="li">Selected <em>work.</em></span></span>
           </h2>
         </div>
         <p class="mono hint" data-fade>Keep scrolling</p>
       </div>
       <div class="films-track" id="films-track">
-        <!-- TODO: swap couple names + posters with real ones from each reel -->
-        <a class="film-card" data-cursor="play" href="https://www.instagram.com/reel/DaYykpbMx-Z/" target="_blank" rel="noopener">
+        <!-- Fashion piece — same file as the hero, so it costs zero extra download -->
+        <a class="film-card" data-cursor="play" data-video="videos/hero.mp4" href="https://www.instagram.com/" target="_blank" rel="noopener">
+          <div class="film-frame">
+            <div class="film-poster" style="background-image:url('https://picsum.photos/seed/hg-fashion/1400/600.jpg')"></div>
+            <div class="film-grade"></div>
+            <span class="film-tc">00:00:24</span>
+          </div>
+          <div class="film-meta">
+            <span class="film-idx">01 — FASHION</span>
+            <h3 class="film-title">Editorial <em>reel</em></h3>
+            <span class="film-loc">LEBANON</span>
+          </div>
+        </a>
+        <!-- TODO: swap couple names + posters with real ones -->
+        <a class="film-card" data-cursor="play" data-video="videos/film-01.mp4" href="https://www.instagram.com/reel/DaYykpbMx-Z/" target="_blank" rel="noopener">
           <div class="film-frame">
             <div class="film-poster" style="background-image:url('https://picsum.photos/seed/hg-reel-one/1400/600.jpg')"></div>
             <div class="film-grade"></div>
             <span class="film-tc">00:03:47</span>
           </div>
           <div class="film-meta">
-            <span class="film-idx">01</span>
+            <span class="film-idx">02 — WEDDING</span>
             <h3 class="film-title">Nour <em>&amp;</em> Karim</h3>
             <span class="film-loc">BEIRUT</span>
           </div>
         </a>
-        <a class="film-card" data-cursor="play" href="https://www.instagram.com/reel/Da5voI0s3pL/" target="_blank" rel="noopener">
+        <a class="film-card" data-cursor="play" data-video="videos/film-02.mp4" href="https://www.instagram.com/reel/Da5voI0s3pL/" target="_blank" rel="noopener">
           <div class="film-frame">
             <div class="film-poster" style="background-image:url('https://picsum.photos/seed/hg-reel-two/1400/600.jpg')"></div>
             <div class="film-grade"></div>
             <span class="film-tc">00:02:58</span>
           </div>
           <div class="film-meta">
-            <span class="film-idx">02</span>
+            <span class="film-idx">03 — WEDDING</span>
             <h3 class="film-title">Yara <em>&amp;</em> Elie</h3>
             <span class="film-loc">MOUNT LEBANON</span>
           </div>
         </a>
-        <a class="film-card" data-cursor="play" href="https://www.instagram.com/reel/DcrbUrDOnd7/" target="_blank" rel="noopener">
+        <a class="film-card" data-cursor="play" data-video="videos/film-03.mp4" href="https://www.instagram.com/reel/DcrbUrDOnd7/" target="_blank" rel="noopener">
           <div class="film-frame">
             <div class="film-poster" style="background-image:url('https://picsum.photos/seed/hg-reel-three/1400/600.jpg')"></div>
             <div class="film-grade"></div>
             <span class="film-tc">00:04:12</span>
           </div>
           <div class="film-meta">
-            <span class="film-idx">03</span>
+            <span class="film-idx">04 — WEDDING</span>
             <h3 class="film-title">Layal <em>&amp;</em> Rami</h3>
             <span class="film-loc">BATROUN</span>
           </div>
         </a>
-        <!-- TODO: point at Haydar's Instagram profile -->
+        <!-- TODO: Instagram profile link -->
         <a class="film-end" data-cursor="link" href="https://www.instagram.com/" target="_blank" rel="noopener">
           <p class="big">More films</p>
           <span class="mono">Instagram →</span>
@@ -479,6 +502,7 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
     <p class="mono booking" data-fade>Now booking 2025 — 2026</p>
     <div class="cta-row" data-fade>
       <a class="btn" data-cursor="link" href="https://wa.me/96179151854" target="_blank" rel="noopener">WhatsApp</a>
+      <!-- TODO: Instagram profile link -->
       <a class="btn ghost" data-cursor="link" href="https://www.instagram.com/" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.4"/><circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" stroke="none"/></svg>
         Instagram
@@ -509,11 +533,12 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw 5.5rem;display:flex;
 <script>
 /* ================================================================
    HAYDAR GHOSN — ENGINE
-   UPGRADE SLOT: paste a direct .mp4 below and scroll-scrubbing
-   through real footage switches on automatically.
+   Videos are relative paths into videos/ — works locally (double-
+   click index.html) and on GitHub Pages / Netlify with no changes.
+   If a file is missing, the site silently falls back to its poster.
 ================================================================ */
 const CONFIG = {
-  heroVideo: '',  // ← e.g. 'https://yourhost.com/haydar-opening.mp4'
+  heroVideo: 'videos/hero.mp4',   // set to '' to keep the poster only
 };
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -562,13 +587,14 @@ if(!finePointer){
   });
 }
 
-/* ---------- HERO VIDEO SLOT ---------- */
+/* ---------- HERO VIDEO (scroll-scrubbed) ---------- */
 const heroMedia = document.getElementById('hero-media');
 const heroPoster = document.getElementById('hero-poster');
 let heroVideo = null, videoReady = false;
 if(CONFIG.heroVideo){
   heroVideo = document.createElement('video');
   Object.assign(heroVideo, { src: CONFIG.heroVideo, muted: true, playsInline: true, preload: 'auto' });
+  heroVideo.setAttribute('muted',''); heroVideo.setAttribute('playsinline','');
   heroVideo.addEventListener('canplaythrough', () => {
     videoReady = true;
     heroVideo.currentTime = 0.001;
@@ -576,6 +602,22 @@ if(CONFIG.heroVideo){
   }, { once:true });
   heroVideo.addEventListener('error', () => { heroVideo = null; }, { once:true });
   heroMedia.appendChild(heroVideo);
+}
+
+/* ---------- WORK CARDS: hover-to-play muted previews ---------- */
+/* preload="none": nothing downloads until the cursor actually lands on a card.
+   A missing file just errors out and removes itself — poster stays. */
+if(finePointer){
+  document.querySelectorAll('.film-card[data-video]').forEach(card => {
+    const v = document.createElement('video');
+    v.muted = true; v.playsInline = true; v.preload = 'none';
+    v.setAttribute('muted',''); v.setAttribute('playsinline','');
+    v.src = card.dataset.video;
+    card.querySelector('.film-frame').appendChild(v);
+    v.addEventListener('error', () => v.remove(), { once:true });
+    card.addEventListener('mouseenter', () => { v.play().catch(()=>{}); });
+    card.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
+  });
 }
 
 /* ================================================================
