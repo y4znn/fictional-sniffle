@@ -39,6 +39,9 @@ body{
   user-select:none;
   -webkit-user-select:none;
 }
+/* things people actually copy stay selectable */
+.contact-meta,.contact-meta a,
+#about .body,.quote blockquote,.quote figcaption{user-select:text;-webkit-user-select:text}
 ::selection{background:var(--brass);color:var(--bg)}
 ::-webkit-scrollbar{width:9px}
 ::-webkit-scrollbar-track{background:var(--bg)}
@@ -422,7 +425,7 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
         <p class="mono hint" data-fade>Keep scrolling</p>
       </div>
       <div class="films-track" id="films-track">
-        <a class="film-card" data-cursor="play" data-video="videos/hero.mp4" href="https://www.instagram.com/" target="_blank" rel="noopener">
+        <a class="film-card" data-cursor="play" data-video="videos/hero.mp4" href="https://www.instagram.com/reel/DRPGbMGiDLP/" target="_blank" rel="noopener">
           <div class="film-frame">
             <div class="film-grade"></div>
             <span class="film-tc">--:--</span>
@@ -462,7 +465,7 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
             <h3 class="film-title">Lara <em>&amp;</em> Rabih</h3>
           </div>
         </a>
-        <a class="film-end" data-cursor="link" href="https://www.instagram.com/" target="_blank" rel="noopener">
+        <a class="film-end" data-cursor="link" href="https://www.instagram.com/haydarghsn/" target="_blank" rel="noopener">
           <p class="big">More films</p>
           <span class="mono">Instagram →</span>
         </a>
@@ -510,7 +513,7 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
       <span class="line"><span class="li">are in the <em>comments.</em></span></span>
     </h2>
     <div class="quotes" id="quotes">
-      <a class="quote-cta" data-fade data-cursor="link" href="https://www.instagram.com/" target="_blank" rel="noopener">
+      <a class="quote-cta" data-fade data-cursor="link" href="https://www.instagram.com/haydarghsn/" target="_blank" rel="noopener">
         <span class="big">Read them, then <em>send a message.</em></span>
         <span class="mono">Open Instagram →</span>
       </a>
@@ -525,7 +528,7 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
     <p class="mono booking" data-fade>Now booking 2025–2026</p>
     <div class="cta-row" data-fade>
       <a class="btn" data-cursor="link" href="https://wa.me/96179151854" target="_blank" rel="noopener">WhatsApp</a>
-      <a class="btn ghost" data-cursor="link" href="https://www.instagram.com/" target="_blank" rel="noopener">
+      <a class="btn ghost" data-cursor="link" href="https://www.instagram.com/haydarghsn/" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.4"/><circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" stroke="none"/></svg>
         Instagram
       </a>
@@ -613,8 +616,8 @@ if(!finePointer){
   }, { passive:true });
   addEventListener('mousedown', () => cursorEl.classList.add('down'), { passive:true });
   addEventListener('mouseup',   () => cursorEl.classList.remove('down'), { passive:true });
-  document.addEventListener('mouseleave', () => { cursorEl.style.opacity = '0'; });
-  document.addEventListener('mouseenter', () => { cursorEl.style.opacity = '1'; });
+  document.documentElement.addEventListener('mouseleave', () => { cursorEl.style.opacity = '0'; });
+  document.documentElement.addEventListener('mouseenter', () => { cursorEl.style.opacity = '1'; });
   document.addEventListener('mouseover', e => {
     const t = e.target.closest('[data-cursor]');
     cursorEl.classList.toggle('play', !!t && t.dataset.cursor==='play');
@@ -973,7 +976,7 @@ if(hasGsap){
     gsap.fromTo(el, { yPercent:120 }, { yPercent:0, duration:1.2, ease:'power4.out',
       scrollTrigger:{ trigger: el, start:'top 88%' } });
   });
-  gsap.utils.toArray('[data-fade]:not(.hero-slate):not(.hero-scroll):not(.hero-est)').forEach(el => {
+  gsap.utils.toArray('[data-fade]:not(.hero-slate):not(.hero-services):not(.hero-scroll):not(.hero-est)').forEach(el => {
     gsap.fromTo(el, { y:28, autoAlpha:0 }, { y:0, autoAlpha:1, duration:1, ease:'power3.out',
       scrollTrigger:{ trigger: el, start:'top 88%' } });
   });
