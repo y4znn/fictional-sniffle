@@ -133,7 +133,7 @@ body.b-light{--chrome-b:var(--ink-on-light)}
   transform:scale(1.18);will-change:transform}
 /* sharp layer */
 #hero-fg{filter:grayscale(.25) contrast(1.08) brightness(.85) sepia(.15) saturate(1.1)}
-/* touch: single sharp layer, no bed, no mask games */
+/* touch: single sharp layer */
 .hero-media.is-touch video{filter:grayscale(.25) contrast(1.08) brightness(.8) sepia(.15) saturate(1.1)}
 /* portrait clip on a landscape screen: frame it, don't crop it */
 @media (orientation:landscape){
@@ -211,7 +211,7 @@ h2 em{color:var(--brass)}
   letter-spacing:.14em;color:var(--ivory);opacity:.85;text-shadow:0 1px 6px rgba(0,0,0,.7)}
 .film-card.is-offline .film-frame{opacity:.4}
 .film-card.is-offline .film-tc{color:var(--red);opacity:1}
-/* touch: centered play chip instead of the cursor PLAY affordance */
+/* touch: centered play chip */
 @media (hover:none){
   .film-frame::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
     z-index:3;width:52px;height:52px;border-radius:50%;
@@ -550,12 +550,11 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
 /* ================================================================
-   HAYDAR GHOSN — ENGINE (mobile-ready build)
-   DESKTOP (unchanged): dual-layer focus-pull hero, hover previews.
-   TOUCH:
-   - hero = single sharp ambient video (no focus machinery, one decoder)
-   - cards load a real frame lazily as they approach the viewport
-   - play chip on cards; safe-area insets; theme-color; Work in nav
+   HAYDAR GHOSN — ENGINE (iOS-safe hero)
+   iOS Safari ignores `preload` and downloads nothing until play()
+   is requested. So: explicit load(), immediate play() kick, reveal
+   on loadeddata/playing (never canplaythrough), still-frame + first-
+   tap fallback for Low Power Mode.
 ================================================================ */
 if('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.scrollTo({ top:0, behavior:'instant' });
@@ -618,8 +617,6 @@ if(!finePointer){
 
 /* ================================================================
    HERO
-   fine pointer: blurred bed + sharp layer + cursor focus-pull
-   touch:        one sharp layer, ambient autoplay
 ================================================================ */
 const heroSection = document.getElementById('hero');
 const heroMedia   = document.getElementById('hero-media');
@@ -629,10 +626,12 @@ let heroBg = null, heroFg = null;
 const heroState = { hovered:false, r:0, tr:0, fx:.5, fy:.5, mx:0, my:0 };
 
 if(CONFIG.heroVideo){
-  const mk = (id) => {
+  const mk = (id, autoplay) => {
     const v = document.createElement('video');
     v.muted = true; v.playsInline = true; v.loop = true; v.preload = 'auto';
+    if(autoplay) v.autoplay = true;
     v.setAttribute('muted',''); v.setAttribute('playsinline','');
+    if(autoplay) v.setAttribute('autoplay','');
     v.id = id; v.src = CONFIG.heroVideo;
     v.addEventListener('error', () => {
       v.remove();
@@ -643,18 +642,25 @@ if(CONFIG.heroVideo){
   };
 
   if(finePointer){
-    heroBg = mk('hero-bg'); heroFg = mk('hero-fg');
+    /* DESKTOP: blurred bed + sharp layer + cursor focus-pull */
+    heroBg = mk('hero-bg', false); heroFg = mk('hero-fg', false);
     heroMedia.append(heroBg, heroFg);
 
     heroFg.addEventListener('loadedmetadata', () => {
       heroMedia.classList.add(heroFg.videoHeight > heroFg.videoWidth ? 'is-portrait' : 'is-landscape');
       if(hasGsap) requestAnimationFrame(() => ScrollTrigger.refresh());
+      /* rest on a representative frame */
       const t = (heroFg.duration || 2) * 0.1;
-      try{ heroFg.currentTime = t; heroBg.currentTime = t; }catch(e){}
+      [heroFg, heroBg].forEach(x => { try{ x.currentTime = t; }catch(e){} });
     }, { once:true });
-    heroFg.addEventListener('canplaythrough', () => {
-      heroFg.classList.add('on'); heroBg.classList.add('on');
-    }, { once:true });
+
+    const reveal = () => { heroFg.classList.add('on'); heroBg.classList.add('on'); };
+    /* canplaythrough is unreliable on WebKit — reveal early instead */
+    heroFg.addEventListener('canplay', reveal, { once:true });
+    heroFg.addEventListener('loadeddata', reveal, { once:true });
+    heroFg.addEventListener('playing', reveal, { once:true });
+
+    heroBg.load(); heroFg.load();
 
     heroSection.addEventListener('mouseenter', e => {
       heroState.hovered = true;
@@ -678,17 +684,36 @@ if(CONFIG.heroVideo){
       heroBg.pause(); heroFg.pause();
     });
   }else{
-    /* TOUCH: single sharp ambient layer */
+    /* TOUCH: single sharp ambient layer, iOS-safe loading */
     heroMedia.classList.add('is-touch');
-    heroFg = mk('hero-fg');
+    heroFg = mk('hero-fg', true);
     heroMedia.appendChild(heroFg);
+
     heroFg.addEventListener('loadedmetadata', () => {
       heroMedia.classList.add(heroFg.videoHeight > heroFg.videoWidth ? 'is-portrait' : 'is-landscape');
+      /* if we can't autoplay, park on a representative still */
+      if(heroFg.paused){ try{ heroFg.currentTime = (heroFg.duration||2)*0.1; }catch(e){} }
     }, { once:true });
-    heroFg.addEventListener('canplaythrough', () => {
-      heroFg.classList.add('on');
-      heroFg.play().catch(()=>{});
-    }, { once:true });
+
+    const reveal = () => heroFg.classList.add('on');
+    heroFg.addEventListener('loadeddata', reveal, { once:true });
+    heroFg.addEventListener('playing',   reveal, { once:true });
+    heroFg.addEventListener('seeked',    reveal, { once:true });
+
+    /* iOS: play() is what starts the download */
+    heroFg.load();
+    const kick = () => { if(heroFg && heroFg.paused) heroFg.play().catch(()=>{}); };
+    kick();
+    /* Low Power Mode blocks autoplay (an OS rule, not a bug):
+       the first touch anywhere starts playback */
+    document.addEventListener('touchstart', kick, { passive:true });
+    document.addEventListener('click', kick);
+    const armed = () => {
+      document.removeEventListener('touchstart', kick);
+      document.removeEventListener('click', kick);
+    };
+    heroFg.addEventListener('playing', armed, { once:true });
+    heroFg.addEventListener('error',   armed, { once:true });
   }
 }
 if(finePointer && maskOK) cueLabel.textContent = 'HOVER TO FOCUS';
@@ -728,6 +753,7 @@ document.querySelectorAll('.film-card[data-video]').forEach(card => {
     const tryPlay = () => { if(hovered){ const p = v.play(); if(p && p.catch) p.catch(()=>{}); } };
     v.preload = 'metadata';
     v.src = card.dataset.video;
+    v.load();
     v.addEventListener('loadedmetadata', () => {
       finishMeta();
       try{ v.currentTime = Math.min(0.5, (v.duration||1)*0.1); }catch(e){}
@@ -737,10 +763,10 @@ document.querySelectorAll('.film-card[data-video]').forEach(card => {
     card.addEventListener('mouseenter', () => { hovered = true; tryPlay(); });
     card.addEventListener('mouseleave', () => { hovered = false; v.pause(); try{ v.currentTime = 0; }catch(e){} });
   }else{
-    /* touch: defer the whole load until the card is ~250px from view */
     const activate = () => {
       v.preload = 'metadata';
       v.src = card.dataset.video;
+      v.load();
       v.addEventListener('loadedmetadata', () => {
         finishMeta();
         try{ v.currentTime = Math.min(0.5, (v.duration||1)*0.1); }catch(e){}
