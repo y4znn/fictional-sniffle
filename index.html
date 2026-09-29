@@ -59,7 +59,7 @@ a,video,img{-webkit-user-drag:none}
 em{font-style:italic}
 
 /* fixed overlays */
-#grain{position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.55}
+#grain{position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.32}
 #grain div{position:absolute;inset:0;background-repeat:repeat;background-size:140px 140px;opacity:0}
 #grain div:nth-child(1){animation:gr .9s steps(1) infinite}
 #grain div:nth-child(2){animation:gr .9s steps(1) infinite;animation-delay:-.3s}
@@ -132,22 +132,29 @@ body.b-light{--chrome-b:var(--ink-on-light)}
 .hero-media video{position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;opacity:0;transition:opacity 1.4s ease}
 .hero-media video.on{opacity:1}
+/* blurred ambient bed: always fills the frame */
 #hero-bg{filter:blur(34px) brightness(.45) saturate(1.25);
   transform:scale(1.18);will-change:transform}
-#hero-fg{filter:grayscale(.25) contrast(1.08) brightness(.85) sepia(.15) saturate(1.1)}
-.hero-media.is-touch video{filter:grayscale(.25) contrast(1.08) brightness(.8) sepia(.15) saturate(1.1)}
+/* sharp layer: near-transparent grade, footage palette leads */
+#hero-fg{filter:contrast(1.03) brightness(.95)}
+/* touch: single sharp layer, same light grade */
+.hero-media.is-touch video{filter:contrast(1.03) brightness(.92)}
+/* portrait clip on a wide screen: bed covers, sharp layer framed */
 @media (orientation:landscape){
-  .hero-media.is-portrait video{object-fit:contain}
+  .hero-media.is-portrait #hero-bg{object-fit:cover}
+  .hero-media.is-portrait #hero-fg{object-fit:contain}
 }
+/* the focus circle — desktop with cursor + mask support */
 .has-focus #hero-fg{
   -webkit-mask-image:radial-gradient(circle var(--fr,0px) at var(--fx,50%) var(--fy,50%),
     #000 0%, #000 54%, transparent 98%);
           mask-image:radial-gradient(circle var(--fr,0px) at var(--fx,50%) var(--fy,50%),
     #000 0%, #000 54%, transparent 98%);
 }
-.no-mask #hero-fg{filter:blur(16px) brightness(.7) sepia(.15);
+/* desktop fallback if masks unsupported */
+.no-mask #hero-fg{filter:blur(16px) brightness(.6);
   transition:filter .9s ease}
-.no-mask #hero.is-focused #hero-fg{filter:grayscale(.25) contrast(1.08) brightness(.85) sepia(.15)}
+.no-mask #hero.is-focused #hero-fg{filter:contrast(1.03) brightness(.95)}
 .hero-media::after{content:"";position:absolute;inset:0;
   background:radial-gradient(ellipse at center, transparent 42%, rgba(5,4,3,.62) 100%)}
 .hero-content{position:relative;z-index:3;text-align:center;padding:0 20px;will-change:transform,opacity;pointer-events:none}
@@ -216,6 +223,7 @@ h2 em{color:var(--brass)}
   letter-spacing:.14em;color:var(--ivory);opacity:.85;text-shadow:0 1px 6px rgba(0,0,0,.7)}
 .film-card.is-offline .film-frame{opacity:.4}
 .film-card.is-offline .film-tc{color:var(--red);opacity:1}
+/* touch: centered play chip */
 @media (hover:none){
   .film-frame::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
     z-index:3;width:52px;height:52px;border-radius:50%;
@@ -586,7 +594,7 @@ if(finePointer){
     const c = document.createElement('canvas'); c.width = c.height = size;
     const cx = c.getContext('2d');
     const d = cx.createImageData(size,size), px = d.data;
-    for(let j=0;j<px.length;j+=4){ const v=(Math.random()*255)|0; px[j]=px[j+1]=px[j+2]=v; px[j+3]=28; }
+    for(let j=0;j<px.length;j+=4){ const v=(Math.random()*255)|0; px[j]=px[j+1]=px[j+2]=v; px[j+3]=20; }
     cx.putImageData(d,0,0);
     const div = document.createElement('div');
     div.style.backgroundImage = `url(${c.toDataURL()})`;
