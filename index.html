@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Haydar Ghosn — Filmmaker & Editor, Lebanon</title>
-<meta name="description" content="Haydar Ghosn — filmmaker and editor based in Lebanon. Weddings, fashion, commercials and brand films. 100+ weddings filmed since 2019.">
+<title>Haydar Ghosn · Filmmaker & Editor · Lebanon</title>
+<meta name="description" content="Filmmaker and editor in Lebanon. Over a hundred weddings since 2019, plus fashion and commercial work.">
 <meta name="theme-color" content="#0c0a08">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230c0a08'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23e33b30'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400;1,6..96,500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#0c0a08;
@@ -21,8 +21,8 @@
   --mut-dim:#5f594d;
   --line:#2a2620;
   --ink-on-light:#161310;
-  --serif:'Fraunces', Georgia, serif;
-  --mono:'IBM Plex Mono', monospace;
+  --serif:'Bodoni Moda','Didot','Bodoni MT',Georgia,serif;
+  --mono:'Space Mono',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -31,7 +31,7 @@ body{
   background:var(--bg);
   color:var(--ivory);
   font-family:var(--serif);
-  font-weight:300;
+  font-weight:400;
   overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
   touch-action:manipulation;
@@ -47,12 +47,12 @@ a{color:inherit;text-decoration:none}
   body, a, button{cursor:none}
 }
 
-.mono{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase}
+.mono{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase}
 .line{display:block;overflow:hidden}
 .line > .li{display:block;will-change:transform}
-em{font-style:italic;font-weight:300}
+em{font-style:italic}
 
-/* ============ FIXED LAYERS ============ */
+/* fixed overlays */
 #grain{position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.55}
 #grain div{position:absolute;inset:0;background-repeat:repeat;background-size:140px 140px;opacity:0}
 #grain div:nth-child(1){animation:gr .9s steps(1) infinite}
@@ -99,18 +99,16 @@ body.b-light{--chrome-b:var(--ink-on-light)}
 #rail-head{position:absolute;left:-4px;top:0;width:11px;height:2px;background:var(--ivory);
   box-shadow:0 0 0 1px rgba(0,0,0,.4);will-change:transform}
 
-/* ============ NAV ============ */
 #nav{position:fixed;top:0;left:0;right:0;z-index:70;display:flex;justify-content:space-between;
   align-items:center;padding:calc(26px + env(safe-area-inset-top)) 52px 26px;
   color:var(--chrome-t);transition:color .45s ease}
 #nav .wordmark{font-family:var(--serif);font-size:1.05rem;font-weight:500;letter-spacing:.04em}
-#nav .wordmark em{font-weight:300}
+#nav .wordmark em{font-weight:400}
 #nav ul{display:flex;gap:2.2rem;list-style:none}
 #nav ul a{font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;position:relative;padding-bottom:3px}
 #nav ul a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:currentColor;transition:width .35s cubic-bezier(.19,1,.22,1)}
 #nav ul a:hover::after{width:100%}
 
-/* ============ PRELOADER ============ */
 #preloader{position:fixed;inset:0;z-index:200}
 .shutter{position:absolute;left:0;width:100%;height:50.5%;background:#070604;will-change:transform}
 .shutter.top{top:0}.shutter.bottom{bottom:0}
@@ -121,32 +119,26 @@ body.b-light{--chrome-b:var(--ink-on-light)}
 .pre-name em{color:var(--brass)}
 #pre-tc{color:var(--mut)}
 
-/* ============ HERO — focus-pull ============ */
+/* hero */
 #hero{position:relative;height:100vh;height:100svh;overflow:hidden;display:flex;
   align-items:center;justify-content:center}
 .hero-media{position:absolute;inset:0;overflow:hidden;background:var(--bg)}
 .hero-media video{position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;opacity:0;transition:opacity 1.4s ease}
 .hero-media video.on{opacity:1}
-/* blurred ambient bed — desktop only */
 #hero-bg{filter:blur(34px) brightness(.45) saturate(1.25);
   transform:scale(1.18);will-change:transform}
-/* sharp layer */
 #hero-fg{filter:grayscale(.25) contrast(1.08) brightness(.85) sepia(.15) saturate(1.1)}
-/* touch: single sharp layer */
 .hero-media.is-touch video{filter:grayscale(.25) contrast(1.08) brightness(.8) sepia(.15) saturate(1.1)}
-/* portrait clip on a landscape screen: frame it, don't crop it */
 @media (orientation:landscape){
   .hero-media.is-portrait video{object-fit:contain}
 }
-/* the focus circle — desktop with cursor + mask support */
 .has-focus #hero-fg{
   -webkit-mask-image:radial-gradient(circle var(--fr,0px) at var(--fx,50%) var(--fy,50%),
     #000 0%, #000 54%, transparent 98%);
           mask-image:radial-gradient(circle var(--fr,0px) at var(--fx,50%) var(--fy,50%),
     #000 0%, #000 54%, transparent 98%);
 }
-/* desktop fallback if masks unsupported */
 .no-mask #hero-fg{filter:blur(16px) brightness(.7) sepia(.15);
   transition:filter .9s ease}
 .no-mask #hero.is-focused #hero-fg{filter:grayscale(.25) contrast(1.08) brightness(.85) sepia(.15)}
@@ -157,7 +149,7 @@ body.b-light{--chrome-b:var(--ink-on-light)}
 .hero-slate .rule{display:inline-block;width:34px;height:1px;background:var(--brass);
   vertical-align:middle;margin:0 14px}
 h1{font-size:clamp(3.4rem,12.5vw,11rem);line-height:.92;font-weight:400;letter-spacing:.01em}
-h1 .l2{font-style:italic;font-weight:300;margin-left:.08em}
+h1 .l2{font-style:italic;font-weight:400;margin-left:.08em}
 .hero-services{margin-top:2.2rem;color:var(--mut)}
 .hero-services b{color:var(--brass);font-weight:400}
 .hero-scroll{position:absolute;bottom:calc(84px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:3;
@@ -168,7 +160,7 @@ h1 .l2{font-style:italic;font-weight:300;margin-left:.08em}
 @keyframes tick{to{top:100%}}
 .hero-est{position:absolute;bottom:calc(84px + env(safe-area-inset-bottom));right:52px;z-index:3;color:var(--mut)}
 
-/* ============ SCENES ============ */
+/* scenes */
 .scene{position:relative;padding:clamp(6rem,14vh,10rem) 8vw}
 .slate{display:flex;align-items:center;gap:1.2rem;margin-bottom:3rem;color:var(--brass)}
 .slate .rule{flex:0 0 44px;height:1px;background:var(--brass)}
@@ -179,16 +171,16 @@ h2 em{color:var(--brass)}
 .scene.light{background:var(--ivory);color:var(--ink-on-light)}
 .scene.light h2 em{color:#8a6a34}
 
-/* ============ ABOUT ============ */
+/* about */
 #about .grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,4fr);gap:clamp(3rem,7vw,7rem);align-items:start}
 #about .body{font-size:clamp(1.05rem,1.6vw,1.3rem);line-height:1.75;margin-top:2.6rem;max-width:54ch}
 .stats{border-top:1px solid var(--line)}
 .stat{padding:1.9rem 0;border-bottom:1px solid var(--line)}
-.stat .num{font-size:clamp(3rem,5.5vw,5rem);font-weight:300;line-height:1;letter-spacing:-.02em}
+.stat .num{font-size:clamp(3rem,5.5vw,5rem);font-weight:400;line-height:1;letter-spacing:-.02em}
 .stat .num sup{font-size:.45em;color:var(--brass);font-style:italic}
 .stat .lbl{display:block;margin-top:.8rem;color:var(--mut)}
 
-/* ============ WORK ============ */
+/* work */
 #films{height:100vh;height:100svh;padding:0;overflow:hidden}
 .films-sticky{height:100%;display:flex;flex-direction:column;justify-content:center}
 .films-head{display:flex;justify-content:space-between;align-items:flex-end;
@@ -207,11 +199,10 @@ h2 em{color:var(--brass)}
 .film-grade{position:absolute;inset:0;z-index:2;background:#c9973f;mix-blend-mode:soft-light;opacity:.32;
   transition:opacity 1.2s ease}
 .film-card:hover .film-grade{opacity:.14}
-.film-tc{position:absolute;right:14px;bottom:12px;z-index:3;font-family:var(--mono);font-size:.62rem;
+.film-tc{position:absolute;right:14px;bottom:12px;z-index:3;font-family:var(--mono);font-size:.6rem;
   letter-spacing:.14em;color:var(--ivory);opacity:.85;text-shadow:0 1px 6px rgba(0,0,0,.7)}
 .film-card.is-offline .film-frame{opacity:.4}
 .film-card.is-offline .film-tc{color:var(--red);opacity:1}
-/* touch: centered play chip */
 @media (hover:none){
   .film-frame::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
     z-index:3;width:52px;height:52px;border-radius:50%;
@@ -221,7 +212,7 @@ h2 em{color:var(--brass)}
   .film-card.is-offline .film-frame::before{display:none}
 }
 .film-meta{display:flex;align-items:baseline;gap:1.4rem;margin-top:1.3rem}
-.film-idx{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;color:var(--mut);transition:color .4s}
+.film-idx{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;color:var(--mut);transition:color .4s}
 .film-card:hover .film-idx{color:var(--brass)}
 .film-title{font-size:clamp(1.4rem,2.4vw,2rem);font-weight:400}
 .film-title em{color:var(--brass)}
@@ -234,7 +225,7 @@ h2 em{color:var(--brass)}
 .film-end .big{font-size:clamp(1.6rem,3vw,2.6rem);font-weight:400}
 .film-end .mono{color:var(--mut)}
 
-/* ============ PROCESS ============ */
+/* process */
 #process .acts{margin-top:3.6rem;border-bottom:1px solid var(--line)}
 .act{display:grid;grid-template-columns:150px 1fr 260px;gap:2.5rem;align-items:baseline;
   padding:2.6rem 0;border-top:1px solid var(--line);transition:padding-left .5s cubic-bezier(.19,1,.22,1)}
@@ -245,21 +236,27 @@ h2 em{color:var(--brass)}
 .act p{color:#cdc5b4;line-height:1.7;max-width:44ch}
 .act-meta{text-align:right;color:var(--mut)}
 
-/* ============ REVIEWS ============ */
+/* kind words */
 #reviews .quotes{margin-top:4rem;display:flex;flex-direction:column;gap:clamp(5rem,12vh,8rem)}
 .quote{max-width:880px;position:relative}
 .quote:nth-child(2){margin-left:auto}
-.quote blockquote{font-size:clamp(1.5rem,3.2vw,2.7rem);line-height:1.35;font-weight:300}
+.quote blockquote{font-size:clamp(1.5rem,3.2vw,2.7rem);line-height:1.35;font-weight:400}
 .quote blockquote::before{content:"\201C";position:absolute;left:-.55em;top:-.18em;
   font-size:1.6em;color:#8a6a34;opacity:.85}
 .quote figcaption{margin-top:1.6rem;color:#6f675a}
+.quote-cta{display:flex;flex-direction:column;gap:1.6rem;border:1px solid rgba(22,19,16,.22);
+  padding:3rem 3.4rem;max-width:560px;transition:border-color .4s}
+.quote-cta:hover{border-color:var(--ink-on-light)}
+.quote-cta .big{font-size:clamp(1.6rem,3vw,2.4rem);line-height:1.25;font-weight:400}
+.quote-cta em{color:#8a6a34}
+.quote-cta .mono{color:#6f675a}
 
-/* ============ CONTACT ============ */
+/* contact */
 #contact h2{font-size:clamp(2.8rem,7.5vw,7rem)}
 .booking{margin-top:2rem;color:var(--brass)}
 .cta-row{display:flex;flex-wrap:wrap;gap:1.2rem;margin-top:3.4rem;align-items:center}
 .btn{display:inline-flex;align-items:center;gap:.9em;border:1px solid var(--ivory);
-  padding:1.15rem 2.1rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;
+  padding:1.15rem 2.1rem;font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;
   text-transform:uppercase;transition:background .4s,color .4s,border-color .4s}
 .btn:hover{background:var(--ivory);color:var(--bg)}
 .btn.ghost{border-color:var(--line);color:var(--mut)}
@@ -269,13 +266,11 @@ h2 em{color:var(--brass)}
 .contact-meta a{border-bottom:1px solid var(--line);padding-bottom:2px;transition:color .3s,border-color .3s}
 .contact-meta a:hover{color:var(--brass);border-color:var(--brass)}
 
-/* ============ FOOTER ============ */
 footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(safe-area-inset-bottom));display:flex;
   flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:2rem}
 .foot-name{font-size:clamp(1.8rem,4vw,3.2rem);font-weight:400}
 .foot-right{text-align:right;color:var(--mut);display:flex;flex-direction:column;gap:.7rem}
 
-/* ============ CURSOR ============ */
 #cursor{position:fixed;top:0;left:0;width:12px;height:12px;border-radius:50%;
   background:var(--ivory);z-index:120;pointer-events:none;
   box-shadow:0 0 0 1px rgba(0,0,0,.22);
@@ -288,7 +283,6 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
 #cursor.down{scale:.85}
 @media (pointer:fine){#cursor{display:flex}}
 
-/* ============ RESPONSIVE ============ */
 @media (max-width:900px){
   #rail,#hud #scene-label,.hero-est{display:none}
   #nav{padding-left:24px;padding-right:24px}
@@ -354,35 +348,33 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
 </header>
 
 <main>
-  <!-- ======= HERO ======= -->
   <section id="hero">
     <div class="hero-media" id="hero-media"></div>
     <div class="hero-content" id="hero-content">
-      <p class="mono hero-slate" data-fade>FILMMAKER <span class="rule"></span> EDITOR — LEBANON</p>
+      <p class="mono hero-slate" data-fade>FILMMAKER <span class="rule"></span> EDITOR <span class="rule"></span> LEBANON</p>
       <h1 aria-label="Haydar Ghosn">
         <span class="line"><span class="li" style="transform:translateY(112%)">HAYDAR</span></span>
         <span class="line"><span class="li l2" style="transform:translateY(112%)"><em>GHOSN</em></span></span>
       </h1>
-      <p class="mono hero-services" data-fade>WEDDINGS <b>—</b> FASHION <b>—</b> COMMERCIALS <b>—</b> BRANDS <b>—</b> EVENTS</p>
+      <p class="mono hero-services" data-fade>WEDDINGS <b>·</b> FASHION <b>·</b> COMMERCIALS <b>·</b> BRANDS <b>·</b> EVENTS</p>
     </div>
     <div class="hero-scroll" data-fade>
       <span class="mono" id="cue-label">SCROLL</span>
       <span class="tick"></span>
     </div>
-    <p class="mono hero-est" data-fade>EST. 2019 — 100+ WEDDINGS</p>
+    <p class="mono hero-est" data-fade>EST. 2019 · 100+ WEDDINGS</p>
   </section>
 
-  <!-- ======= SCENE 01 · ABOUT ======= -->
   <section id="about" class="scene dark">
-    <p class="mono slate" data-fade><span class="rule"></span>SCENE 01 — ABOUT</p>
+    <p class="mono slate" data-fade><span class="rule"></span>SCENE 01 · ABOUT</p>
     <h2>
-      <span class="line"><span class="li">One eye,</span></span>
-      <span class="line"><span class="li">every kind of <em>story.</em></span></span>
+      <span class="line"><span class="li">The short</span></span>
+      <span class="line"><span class="li"><em>version.</em></span></span>
     </h2>
     <div class="grid">
       <div>
-        <p class="body" data-fade>I'm a filmmaker and editor based in Lebanon. Five years behind the camera — over a hundred weddings, plus fashion films, commercials and brand content.</p>
-        <p class="body" data-fade>Whatever the format, the approach doesn't change: film it honestly, cut it tight, grade it warm.</p>
+        <p class="body" data-fade>I'm a filmmaker and editor based in Lebanon. Since 2019 I've filmed over a hundred weddings across the country, plus fashion and commercial work.</p>
+        <p class="body" data-fade>No big crew, no staging. I film the day as it happens and spend the weeks after in the edit, until it plays the way the day felt.</p>
       </div>
       <div class="stats">
         <div class="stat" data-fade><span class="num"><span data-count="100">100</span><sup>+</sup></span><span class="lbl mono">Weddings filmed</span></div>
@@ -391,12 +383,12 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
     </div>
   </section>
 
-  <!-- ======= SCENE 02 · WORK ======= -->
+  <!-- files in /videos: data-video names must match exactly (spaces as %20, & as %26) -->
   <section id="films" class="scene dark">
     <div class="films-sticky">
       <div class="films-head">
         <div>
-          <p class="mono slate" style="margin-bottom:1.6rem"><span class="rule"></span>SCENE 02 — WORK</p>
+          <p class="mono slate" style="margin-bottom:1.6rem"><span class="rule"></span>SCENE 02 · WORK</p>
           <h2>
             <span class="line"><span class="li">Selected <em>work.</em></span></span>
           </h2>
@@ -410,18 +402,17 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
             <span class="film-tc">--:--</span>
           </div>
           <div class="film-meta">
-            <span class="film-idx">01 — FASHION</span>
+            <span class="film-idx">01 · FASHION</span>
             <h3 class="film-title">Editorial <em>reel</em></h3>
           </div>
         </a>
-        <!-- TODO: point each card at its Instagram reel -->
         <a class="film-card" data-cursor="play" data-video="videos/ali%20%26%20marwa.mp4" href="https://www.instagram.com/reel/DaYykpbMx-Z/" target="_blank" rel="noopener">
           <div class="film-frame">
             <div class="film-grade"></div>
             <span class="film-tc">--:--</span>
           </div>
           <div class="film-meta">
-            <span class="film-idx">02 — WEDDING</span>
+            <span class="film-idx">02 · WEDDING</span>
             <h3 class="film-title">Ali <em>&amp;</em> Marwa</h3>
           </div>
         </a>
@@ -431,7 +422,7 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
             <span class="film-tc">--:--</span>
           </div>
           <div class="film-meta">
-            <span class="film-idx">03 — WEDDING</span>
+            <span class="film-idx">03 · WEDDING</span>
             <h3 class="film-title">Joe <em>&amp;</em> Mira</h3>
           </div>
         </a>
@@ -441,11 +432,10 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
             <span class="film-tc">--:--</span>
           </div>
           <div class="film-meta">
-            <span class="film-idx">04 — WEDDING</span>
+            <span class="film-idx">04 · WEDDING</span>
             <h3 class="film-title">Lara <em>&amp;</em> Rabih</h3>
           </div>
         </a>
-        <!-- TODO: Instagram profile link -->
         <a class="film-end" data-cursor="link" href="https://www.instagram.com/" target="_blank" rel="noopener">
           <p class="big">More films</p>
           <span class="mono">Instagram →</span>
@@ -454,9 +444,8 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
     </div>
   </section>
 
-  <!-- ======= SCENE 03 · PROCESS ======= -->
   <section id="process" class="scene dark">
-    <p class="mono slate" data-fade><span class="rule"></span>SCENE 03 — PROCESS</p>
+    <p class="mono slate" data-fade><span class="rule"></span>SCENE 03 · PROCESS</p>
     <h2>
       <span class="line"><span class="li">How it <em>works.</em></span></span>
     </h2>
@@ -481,46 +470,35 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
         <span class="act-no">III</span>
         <div>
           <h3>The film</h3>
-          <p>Edit, sound, color. Delivered as a film, not files.</p>
+          <p>Weeks in the edit. You get a finished film, not a folder of files.</p>
         </div>
         <span class="mono act-meta">Post-production</span>
       </div>
     </div>
   </section>
 
-  <!-- ======= SCENE 04 · REVIEWS ======= -->
   <section id="reviews" class="scene light">
-    <p class="mono slate" data-fade><span class="rule"></span>SCENE 04 — REVIEWS</p>
-    <h2>
-      <span class="line"><span class="li">What couples <em>say.</em></span></span>
+    <p class="mono slate" data-fade><span class="rule"></span>SCENE 04 · KIND WORDS</p>
+    <h2 id="reviews-h2">
+      <span class="line"><span class="li">The best reviews</span></span>
+      <span class="line"><span class="li">are in the <em>comments.</em></span></span>
     </h2>
-    <!-- TODO: swap with real testimonials -->
-    <div class="quotes">
-      <figure class="quote" data-fade>
-        <blockquote>We forgot the camera was there.</blockquote>
-        <figcaption class="mono">Ranya &amp; Elie — Mount Lebanon</figcaption>
-      </figure>
-      <figure class="quote" data-fade>
-        <blockquote>The film feels exactly like the day felt.</blockquote>
-        <figcaption class="mono">Carla &amp; Georges — Beirut</figcaption>
-      </figure>
-      <figure class="quote" data-fade>
-        <blockquote>We still watch it every anniversary.</blockquote>
-        <figcaption class="mono">Nada &amp; Fadi — Batroun</figcaption>
-      </figure>
+    <div class="quotes" id="quotes">
+      <a class="quote-cta" data-fade data-cursor="link" href="https://www.instagram.com/" target="_blank" rel="noopener">
+        <span class="big">Read them, then <em>send a message.</em></span>
+        <span class="mono">Open Instagram →</span>
+      </a>
     </div>
   </section>
 
-  <!-- ======= SCENE 05 · CONTACT ======= -->
   <section id="contact" class="scene dark">
-    <p class="mono slate" data-fade><span class="rule"></span>SCENE 05 — CONTACT</p>
+    <p class="mono slate" data-fade><span class="rule"></span>SCENE 05 · CONTACT</p>
     <h2>
       <span class="line"><span class="li">Book your <em>date.</em></span></span>
     </h2>
-    <p class="mono booking" data-fade>Now booking 2025 — 2026</p>
+    <p class="mono booking" data-fade>Now booking 2025–2026</p>
     <div class="cta-row" data-fade>
       <a class="btn" data-cursor="link" href="https://wa.me/96179151854" target="_blank" rel="noopener">WhatsApp</a>
-      <!-- TODO: Instagram profile link -->
       <a class="btn ghost" data-cursor="link" href="https://www.instagram.com/" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.4"/><circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" stroke="none"/></svg>
         Instagram
@@ -549,19 +527,20 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
-/* ================================================================
-   HAYDAR GHOSN — ENGINE (iOS-safe hero)
-   iOS Safari ignores `preload` and downloads nothing until play()
-   is requested. So: explicit load(), immediate play() kick, reveal
-   on loadeddata/playing (never canplaythrough), still-frame + first-
-   tap fallback for Low Power Mode.
-================================================================ */
+/* Haydar Ghosn portfolio. One rAF loop for scroll + HUD.
+   Hero video: Safari downloads nothing until play() is requested,
+   so playback is kicked immediately and reveal waits for real data. */
 if('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.scrollTo({ top:0, behavior:'instant' });
 
 const CONFIG = {
-  heroVideo: 'videos/hero.mp4',   // set to '' to disable the hero video
+  heroVideo: 'videos/hero.mp4',
 };
+
+/* Kind words. Real quotes only, pasted from Instagram comments or DMs.
+   Format: { text:'their words', who:'NAME & NAME, CITY' }
+   One entry per quote; the section renders itself. */
+const QUOTES = [];
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const finePointer  = window.matchMedia('(pointer: fine)').matches;
@@ -581,7 +560,7 @@ if(finePointer){
   document.documentElement.classList.add(maskOK ? 'has-focus' : 'no-mask');
 }
 
-/* ---------- FILM GRAIN ---------- */
+/* grain: three pre-rendered tiles cycled by CSS */
 (() => {
   const host = document.getElementById('grain');
   const size = 140;
@@ -597,7 +576,7 @@ if(finePointer){
   }
 })();
 
-/* ---------- CUSTOM CURSOR (desktop only) ---------- */
+/* cursor (desktop only) */
 const cursorEl = document.getElementById('cursor');
 if(!finePointer){
   cursorEl.remove();
@@ -615,9 +594,24 @@ if(!finePointer){
   });
 }
 
-/* ================================================================
-   HERO
-================================================================ */
+/* kind words: real quotes replace the fallback before anything animates */
+(() => {
+  if(!QUOTES.length) return;
+  const h2 = document.getElementById('reviews-h2');
+  const wrap = document.getElementById('quotes');
+  h2.innerHTML = '<span class="line"><span class="li">What couples <em>say.</em></span></span>';
+  wrap.innerHTML = QUOTES.map(() => `
+    <figure class="quote" data-fade>
+      <blockquote></blockquote>
+      <figcaption class="mono"></figcaption>
+    </figure>`).join('');
+  wrap.querySelectorAll('.quote').forEach((fig, i) => {
+    fig.querySelector('blockquote').textContent = QUOTES[i].text;
+    fig.querySelector('figcaption').textContent = QUOTES[i].who;
+  });
+})();
+
+/* hero */
 const heroSection = document.getElementById('hero');
 const heroMedia   = document.getElementById('hero-media');
 const heroContent = document.getElementById('hero-content');
@@ -629,7 +623,6 @@ if(CONFIG.heroVideo){
   const mk = (id, autoplay) => {
     const v = document.createElement('video');
     v.muted = true; v.playsInline = true; v.loop = true; v.preload = 'auto';
-    if(autoplay) v.autoplay = true;
     v.setAttribute('muted',''); v.setAttribute('playsinline','');
     if(autoplay) v.setAttribute('autoplay','');
     v.id = id; v.src = CONFIG.heroVideo;
@@ -642,20 +635,17 @@ if(CONFIG.heroVideo){
   };
 
   if(finePointer){
-    /* DESKTOP: blurred bed + sharp layer + cursor focus-pull */
     heroBg = mk('hero-bg', false); heroFg = mk('hero-fg', false);
     heroMedia.append(heroBg, heroFg);
 
     heroFg.addEventListener('loadedmetadata', () => {
       heroMedia.classList.add(heroFg.videoHeight > heroFg.videoWidth ? 'is-portrait' : 'is-landscape');
       if(hasGsap) requestAnimationFrame(() => ScrollTrigger.refresh());
-      /* rest on a representative frame */
       const t = (heroFg.duration || 2) * 0.1;
       [heroFg, heroBg].forEach(x => { try{ x.currentTime = t; }catch(e){} });
     }, { once:true });
 
     const reveal = () => { heroFg.classList.add('on'); heroBg.classList.add('on'); };
-    /* canplaythrough is unreliable on WebKit — reveal early instead */
     heroFg.addEventListener('canplay', reveal, { once:true });
     heroFg.addEventListener('loadeddata', reveal, { once:true });
     heroFg.addEventListener('playing', reveal, { once:true });
@@ -684,14 +674,12 @@ if(CONFIG.heroVideo){
       heroBg.pause(); heroFg.pause();
     });
   }else{
-    /* TOUCH: single sharp ambient layer, iOS-safe loading */
     heroMedia.classList.add('is-touch');
     heroFg = mk('hero-fg', true);
     heroMedia.appendChild(heroFg);
 
     heroFg.addEventListener('loadedmetadata', () => {
       heroMedia.classList.add(heroFg.videoHeight > heroFg.videoWidth ? 'is-portrait' : 'is-landscape');
-      /* if we can't autoplay, park on a representative still */
       if(heroFg.paused){ try{ heroFg.currentTime = (heroFg.duration||2)*0.1; }catch(e){} }
     }, { once:true });
 
@@ -700,12 +688,10 @@ if(CONFIG.heroVideo){
     heroFg.addEventListener('playing',   reveal, { once:true });
     heroFg.addEventListener('seeked',    reveal, { once:true });
 
-    /* iOS: play() is what starts the download */
     heroFg.load();
     const kick = () => { if(heroFg && heroFg.paused) heroFg.play().catch(()=>{}); };
     kick();
-    /* Low Power Mode blocks autoplay (an OS rule, not a bug):
-       the first touch anywhere starts playback */
+    /* Low Power Mode blocks autoplay at OS level; first touch starts it */
     document.addEventListener('touchstart', kick, { passive:true });
     document.addEventListener('click', kick);
     const armed = () => {
@@ -718,11 +704,8 @@ if(CONFIG.heroVideo){
 }
 if(finePointer && maskOK) cueLabel.textContent = 'HOVER TO FOCUS';
 
-/* ================================================================
-   WORK CARDS
-   desktop: metadata + frame immediately, play/pause on hover
-   touch:   lazy — nothing loads until the card nears the viewport
-================================================================ */
+/* work cards: desktop = metadata + first frame + hover-play;
+   touch = nothing loads until the card nears the viewport */
 document.querySelectorAll('.film-card[data-video]').forEach(card => {
   const frame = card.querySelector('.film-frame');
   const tc = card.querySelector('.film-tc');
@@ -786,9 +769,7 @@ document.querySelectorAll('.film-card[data-video]').forEach(card => {
   }
 });
 
-/* ================================================================
-   ENGINE
-================================================================ */
+/* scroll engine */
 const TOTAL_SECONDS = 168;
 const tcEl      = document.getElementById('tc');
 const railHead  = document.getElementById('rail-head');
@@ -918,7 +899,7 @@ let rzT;
 addEventListener('resize', () => { clearTimeout(rzT); rzT = setTimeout(measure, 150); }, { passive:true });
 if(hasGsap) ScrollTrigger.addEventListener('refresh', measure);
 
-/* ---------- PRELOADER + HERO INTRO ---------- */
+/* intro */
 const heroIntro = () => {
   document.documentElement.classList.remove('lock');
   window.scrollTo({ top:0, behavior:'instant' });
@@ -947,7 +928,7 @@ const heroIntro = () => {
   pre.addEventListener('click', () => tl.progress(0.75));
 })();
 
-/* FAILSAFE */
+/* if anything above fails, unlock the page after 5s */
 setTimeout(() => {
   const p = document.getElementById('preloader');
   if(p){
@@ -959,7 +940,6 @@ setTimeout(() => {
   }
 }, 5000);
 
-/* ---------- SCROLLTRIGGER SCENES ---------- */
 if(hasGsap){
   gsap.utils.toArray('h2 .li').forEach(el => {
     gsap.fromTo(el, { yPercent:112 }, { yPercent:0, duration:1.2, ease:'power4.out',
