@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Haydar Ghosn · Filmmaker & Editor · Lebanon</title>
-<meta name="description" content="Filmmaker and editor in Lebanon. Over a hundred weddings since 2019, plus fashion and commercial work.">
+<meta name="description" content="Filmmaker and editor in Lebanon. Wedding, fashion and commercial films since 2019.">
 <meta name="theme-color" content="#0c0a08">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230c0a08'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23e33b30'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -390,7 +390,7 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
       <span id="cue-label">SCROLL</span>
       <span class="tick"></span>
     </div>
-    <p class="hero-est" data-fade>EST. 2019 · 100+ WEDDINGS</p>
+    <p class="hero-est" data-fade>EST. 2019 · 100+ FILMS</p>
   </section>
 
   <section id="about" class="scene dark">
@@ -401,11 +401,11 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
     </h2>
     <div class="grid">
       <div>
-        <p class="body" data-fade>I'm a filmmaker and editor based in Lebanon. Since 2019 I've filmed over a hundred weddings across the country, plus fashion and commercial work.</p>
-        <p class="body" data-fade>No big crew, no staging. I film the day as it happens and spend the weeks after in the edit, until it plays the way the day felt.</p>
+        <p class="body" data-fade>I'm a filmmaker and editor based in Lebanon. Since 2019 I've made over a hundred films — weddings, fashion, commercials, events.</p>
+        <p class="body" data-fade>No big crew, no staging. I shoot what actually happens and spend the weeks after in the edit, until it plays the way it felt.</p>
       </div>
       <div class="stats">
-        <div class="stat" data-fade><span class="num">100<sup>+</sup></span><span class="lbl mono">Weddings filmed</span></div>
+        <div class="stat" data-fade><span class="num">100<sup>+</sup></span><span class="lbl mono">Films delivered</span></div>
       </div>
     </div>
   </section>
@@ -477,17 +477,17 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
         <span class="act-no">I</span>
         <div>
           <h3>Before</h3>
-          <p>One call. I plan the film around your day.</p>
+          <p>One call. We figure out what the film needs to do, then plan around it.</p>
         </div>
         <span class="mono act-meta">Pre-production</span>
       </div>
       <div class="act" data-fade>
         <span class="act-no">II</span>
         <div>
-          <h3>The day</h3>
-          <p>I film like a guest. You won't notice me.</p>
+          <h3>The shoot</h3>
+          <p>Small setup, light footprint. I stay out of the way and film what's real.</p>
         </div>
-        <span class="mono act-meta">Wedding day</span>
+        <span class="mono act-meta">Production</span>
       </div>
       <div class="act" data-fade>
         <span class="act-no">III</span>
@@ -561,7 +561,7 @@ const CONFIG = {
 };
 
 /* Kind words. Real quotes only, pasted from Instagram comments or DMs.
-   Format: { text:'their words', who:'NAME & NAME, CITY' }
+   Format: { text:'their words', who:'NAME OR BRAND, CITY' }
    One entry per quote; the section renders itself. */
 const QUOTES = [];
 
@@ -624,7 +624,7 @@ if(!finePointer){
   if(!QUOTES.length) return;
   const h2 = document.getElementById('reviews-h2');
   const wrap = document.getElementById('quotes');
-  h2.innerHTML = '<span class="line"><span class="li">What couples say</span></span>';
+  h2.innerHTML = '<span class="line"><span class="li">What clients say</span></span>';
   wrap.innerHTML = QUOTES.map(() => `
     <figure class="quote" data-fade>
       <blockquote></blockquote>
