@@ -208,7 +208,6 @@ h2 em{color:var(--brass)}
 .films-sticky{height:100%;display:flex;flex-direction:column;justify-content:center}
 .films-head{display:flex;justify-content:space-between;align-items:flex-end;
   padding:0 8vw;margin-bottom:clamp(2rem,5vh,4rem)}
-.films-head .hint{color:var(--mut)}
 .films-track{display:flex;align-items:center;gap:clamp(2rem,4.5vw,4.5rem);
   padding:0 8vw;width:max-content;will-change:transform}
 .film-card{flex:none;width:clamp(300px,52vw,720px);display:block}
@@ -261,7 +260,7 @@ h2 em{color:var(--brass)}
 .act-meta{text-align:right;color:var(--mut)}
 
 /* kind words */
-#reviews .quotes{margin-top:4rem;display:flex;column-gap:0;flex-direction:column;gap:clamp(5rem,12vh,8rem)}
+#reviews .quotes{margin-top:4rem;display:flex;flex-direction:column;gap:clamp(5rem,12vh,8rem)}
 .quote{max-width:880px;position:relative}
 .quote:nth-child(2){margin-left:auto}
 .quote blockquote{font-size:clamp(1.5rem,3.2vw,2.7rem);line-height:1.35;font-weight:400}
@@ -343,7 +342,7 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
   <div class="shutter top"></div>
   <div class="shutter bottom"></div>
   <div class="pre-center">
-    <p class="mono pre-sub">LOADING</p>
+    <p class="mono pre-sub">ROLLING</p>
     <div class="pre-name">
       <span class="line"><span class="li" style="transform:translateY(120%)">HAYDAR <em>GHOSN</em></span></span>
     </div>
@@ -385,7 +384,7 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
         <span class="line"><span class="li" style="transform:translateY(120%)">HAYDAR</span></span>
         <span class="line"><span class="li l2" style="transform:translateY(120%)"><em>GHOSN</em></span></span>
       </h1>
-      <p class="hero-services" data-fade>WEDDINGS <b>·</b> FASHION <b>·</b> COMMERCIALS <b>·</b> BRANDS <b>·</b> EVENTS</p>
+      <p class="hero-services" data-fade>WEDDINGS <b>·</b> FASHION <b>·</b> COMMERCIALS <b>·</b> EVENTS</p>
     </div>
     <div class="hero-scroll" data-fade>
       <span id="cue-label">SCROLL</span>
@@ -406,8 +405,7 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
         <p class="body" data-fade>No big crew, no staging. I film the day as it happens and spend the weeks after in the edit, until it plays the way the day felt.</p>
       </div>
       <div class="stats">
-        <div class="stat" data-fade><span class="num"><span data-count="100">100</span><sup>+</sup></span><span class="lbl mono">Weddings filmed</span></div>
-        <div class="stat" data-fade><span class="num"><span data-count="5">5</span><sup>+</sup></span><span class="lbl mono">Years filming</span></div>
+        <div class="stat" data-fade><span class="num">100<sup>+</sup></span><span class="lbl mono">Weddings filmed</span></div>
       </div>
     </div>
   </section>
@@ -419,10 +417,9 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
         <div>
           <p class="mono slate" style="margin-bottom:1.6rem"><span class="rule"></span>SCENE 02 · WORK</p>
           <h2>
-            <span class="line"><span class="li">Selected <em>work.</em></span></span>
+            <span class="line"><span class="li">Selected films</span></span>
           </h2>
         </div>
-        <p class="mono hint" data-fade>Keep scrolling</p>
       </div>
       <div class="films-track" id="films-track">
         <a class="film-card" data-cursor="play" data-video="videos/hero.mp4" href="https://www.instagram.com/reel/DRPGbMGiDLP/" target="_blank" rel="noopener">
@@ -472,14 +469,15 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
   <section id="process" class="scene dark">
     <p class="mono slate" data-fade><span class="rule"></span>SCENE 03 · PROCESS</p>
     <h2>
-      <span class="line"><span class="li">How it <em>works.</em></span></span>
+      <span class="line"><span class="li">From first call</span></span>
+      <span class="line"><span class="li">to final <em>cut</em></span></span>
     </h2>
     <div class="acts">
       <div class="act" data-fade>
         <span class="act-no">I</span>
         <div>
           <h3>Before</h3>
-          <p>One call. We plan the film around your day.</p>
+          <p>One call. I plan the film around your day.</p>
         </div>
         <span class="mono act-meta">Pre-production</span>
       </div>
@@ -519,7 +517,7 @@ footer{border-top:1px solid var(--line);padding:3.4rem 8vw calc(5.5rem + env(saf
   <section id="contact" class="scene dark">
     <p class="mono slate" data-fade><span class="rule"></span>SCENE 05 · CONTACT</p>
     <h2>
-      <span class="line"><span class="li">Book your <em>date.</em></span></span>
+      <span class="line"><span class="li">Book your date</span></span>
     </h2>
     <p class="mono booking" data-fade>Now booking 2025–2026</p>
     <div class="cta-row" data-fade>
@@ -626,7 +624,7 @@ if(!finePointer){
   if(!QUOTES.length) return;
   const h2 = document.getElementById('reviews-h2');
   const wrap = document.getElementById('quotes');
-  h2.innerHTML = '<span class="line"><span class="li">What couples <em>say.</em></span></span>';
+  h2.innerHTML = '<span class="line"><span class="li">What couples say</span></span>';
   wrap.innerHTML = QUOTES.map(() => `
     <figure class="quote" data-fade>
       <blockquote></blockquote>
@@ -975,11 +973,6 @@ if(hasGsap){
   gsap.utils.toArray('[data-fade]:not(.hero-slate):not(.hero-services):not(.hero-scroll):not(.hero-est)').forEach(el => {
     gsap.fromTo(el, { y:28, autoAlpha:0 }, { y:0, autoAlpha:1, duration:1, ease:'power3.out',
       scrollTrigger:{ trigger: el, start:'top 88%' } });
-  });
-  gsap.utils.toArray('[data-count]').forEach(el => {
-    const end = +el.dataset.count;
-    gsap.fromTo(el, { innerText:0 }, { innerText:end, duration:1.6, ease:'power2.out', snap:{innerText:1},
-      scrollTrigger:{ trigger: el, start:'top 85%' } });
   });
 
   const track = document.getElementById('films-track');
